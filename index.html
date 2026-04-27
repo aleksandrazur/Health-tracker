@@ -29,14 +29,14 @@ body{background:var(--bg);color:var(--text);font-family:-apple-system,Georgia,se
 .card{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:14px;margin-bottom:10px;}
 .card-title{font-size:10px;text-transform:uppercase;letter-spacing:2px;margin-bottom:10px;}
 .section-label{font-size:10px;color:var(--muted);text-transform:uppercase;letter-spacing:2px;margin:14px 0 8px 4px;}
- 
+
 /* DAY TYPE TOGGLE */
 .day-toggle{display:flex;background:#0f172a;border-radius:100px;padding:3px;border:1px solid var(--border);gap:3px;margin-bottom:14px;}
 .day-toggle-btn{flex:1;padding:8px;border-radius:100px;border:none;font-family:inherit;font-size:12px;font-weight:700;cursor:pointer;transition:all 0.2s;}
 .day-toggle-btn.active-regular{background:var(--amber);color:#080d1a;}
 .day-toggle-btn.active-training{background:var(--teal);color:#080d1a;}
 .day-toggle-btn:not(.active-regular):not(.active-training){background:none;color:var(--muted);}
- 
+
 /* MEDS */
 .progress-bar{height:5px;background:var(--card2);border-radius:3px;margin-bottom:14px;overflow:hidden;}
 .progress-fill{height:100%;background:linear-gradient(90deg,var(--amber),var(--green));border-radius:3px;transition:width 0.5s;}
@@ -49,7 +49,7 @@ body{background:var(--bg);color:var(--text);font-family:-apple-system,Georgia,se
 .med-dose{font-size:11px;color:var(--muted);}
 .med-note{font-size:11px;color:#fbbf24;margin-top:1px;padding-left:32px;margin-bottom:4px;}
 .training-badge{display:inline-block;padding:1px 7px;border-radius:20px;font-size:9px;font-weight:700;background:var(--teal);color:#080d1a;margin-left:6px;vertical-align:middle;}
- 
+
 /* WATER */
 .water-section{background:var(--card);border:1px solid #1e4060;border-radius:12px;padding:14px;margin-bottom:10px;}
 .water-top{display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;}
@@ -61,7 +61,7 @@ body{background:var(--bg);color:var(--text);font-family:-apple-system,Georgia,se
 .water-count-big{font-size:22px;font-weight:800;color:var(--blue);}
 .water-sub{font-size:10px;color:var(--muted);}
 .water-reset{padding:4px 10px;border-radius:20px;border:1px solid var(--border);background:none;color:var(--muted);font-size:11px;font-family:inherit;cursor:pointer;}
- 
+
 /* QUICK WIDGET */
 .widget{background:linear-gradient(135deg,#0f172a,#1a0a2e);border:1px solid var(--purple);border-radius:14px;padding:14px;margin-bottom:10px;}
 .widget-title{font-size:10px;color:var(--purple);text-transform:uppercase;letter-spacing:2px;margin-bottom:10px;}
@@ -81,7 +81,7 @@ body{background:var(--bg);color:var(--text);font-family:-apple-system,Georgia,se
 .wi-btn{flex:1;padding:6px;border-radius:8px;border:1px solid var(--border);background:var(--card2);color:var(--muted);font-size:12px;font-family:inherit;cursor:pointer;transition:all 0.2s;}
 .wi-btn.sel{background:var(--amber);border-color:var(--amber);color:#080d1a;font-weight:700;}
 .widget-save{width:100%;padding:10px;border-radius:10px;border:none;background:var(--purple);color:#080d1a;font-family:inherit;font-size:13px;font-weight:700;cursor:pointer;}
- 
+
 /* SYMPTOMS FULL */
 .symptom-grid{display:grid;grid-template-columns:1fr 1fr;gap:6px;margin-bottom:10px;}
 .sym-btn{padding:9px 6px;border-radius:10px;border:1px solid var(--border);background:var(--card2);color:var(--muted);font-size:12px;font-family:inherit;cursor:pointer;transition:all 0.2s;}
@@ -110,7 +110,7 @@ textarea::placeholder,input::placeholder{color:var(--muted);}
 .btn-muted{background:var(--card2);color:var(--muted);}
 .btn-blue{background:var(--blue);color:#080d1a;}
 .btn-purple{background:var(--purple);color:#080d1a;}
- 
+
 /* LOG ITEMS */
 .log-item{background:var(--card2);border-radius:10px;padding:10px 12px;margin-bottom:7px;position:relative;}
 .log-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:3px;}
@@ -122,13 +122,13 @@ textarea::placeholder,input::placeholder{color:var(--muted);}
 .del-btn{position:absolute;top:8px;right:10px;background:none;border:none;color:#374151;font-size:16px;cursor:pointer;padding:2px 6px;border-radius:6px;}
 .del-btn:hover{color:var(--red);background:#1a0a0a;}
 .empty{text-align:center;color:var(--muted);font-size:13px;padding:20px;}
- 
+
 /* MEAL */
 .meal-types{display:flex;gap:5px;flex-wrap:wrap;margin-bottom:8px;}
 .mt-btn{padding:5px 11px;border-radius:20px;border:1px solid var(--border);background:var(--card2);color:var(--muted);font-size:12px;font-family:inherit;cursor:pointer;transition:all 0.2s;}
 .mt-btn.sel{background:var(--green);border-color:var(--green);color:#080d1a;font-weight:700;}
 .trigger-alert{background:#2d1515;border:1px solid var(--red);border-radius:8px;padding:10px 12px;margin-bottom:8px;font-size:12px;color:var(--red);display:none;}
- 
+
 /* SLEEP */
 .sleep-row{display:flex;gap:8px;margin-bottom:8px;}
 .sleep-half{flex:1;}
@@ -136,7 +136,7 @@ textarea::placeholder,input::placeholder{color:var(--muted);}
 .mood-row{display:flex;gap:5px;margin-bottom:10px;}
 .mood-btn{flex:1;padding:8px 4px;border-radius:8px;border:1px solid var(--border);background:var(--card2);font-size:18px;cursor:pointer;transition:all 0.2s;text-align:center;}
 .mood-btn.sel{border-color:var(--amber);background:#1a1500;}
- 
+
 /* HISTORY */
 .summary-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:7px;margin-bottom:12px;}
 .sum-card{background:var(--card);border-radius:10px;padding:10px;text-align:center;border:1px solid var(--border);}
@@ -156,7 +156,7 @@ textarea::placeholder,input::placeholder{color:var(--muted);}
 </style>
 </head>
 <body>
- 
+
 <!-- PAGE: MEDS -->
 <div id="page-meds" class="page active">
   <div class="header">
@@ -167,15 +167,15 @@ textarea::placeholder,input::placeholder{color:var(--muted);}
     <p>🔔 Włącz powiadomienia o lekach, posiłkach i wodzie</p>
     <button class="notify-btn" onclick="requestNotifications()">Włącz</button>
   </div>
- 
+
   <!-- DAY TYPE TOGGLE -->
   <div class="day-toggle">
     <button class="day-toggle-btn active-regular" id="btn-regular" onclick="setDayType('regular')">🗓 Dzień zwykły</button>
     <button class="day-toggle-btn" id="btn-training" onclick="setDayType('training')">💃 Dzień treningowy</button>
   </div>
- 
+
   <div class="progress-bar"><div class="progress-fill" id="med-progress" style="width:0%"></div></div>
- 
+
   <!-- QUICK WIDGET -->
   <div class="widget">
     <div class="widget-title">⚡ Szybki log objawów</div>
@@ -197,7 +197,7 @@ textarea::placeholder,input::placeholder{color:var(--muted);}
     </div>
     <button class="widget-save" onclick="wSave()">💾 Zapisz teraz</button>
   </div>
- 
+
   <!-- WATER -->
   <div class="water-section">
     <div class="water-top">
@@ -212,10 +212,10 @@ textarea::placeholder,input::placeholder{color:var(--muted);}
       </div>
     </div>
   </div>
- 
+
   <div id="meds-list"></div>
 </div>
- 
+
 <!-- PAGE: SYMPTOMS -->
 <div id="page-symptoms" class="page">
   <div class="header"><h1>📋 Objawy</h1><p>Szczegółowy log</p></div>
@@ -245,7 +245,7 @@ textarea::placeholder,input::placeholder{color:var(--muted);}
   <div class="section-label">Dziś</div>
   <div id="symptoms-today"></div>
 </div>
- 
+
 <!-- PAGE: FOOD -->
 <div id="page-food" class="page">
   <div class="header"><h1>🍽️ Posiłki</h1><p>Co i kiedy jesz</p></div>
@@ -276,7 +276,7 @@ textarea::placeholder,input::placeholder{color:var(--muted);}
   <div class="section-label">Dziś</div>
   <div id="meals-today"></div>
 </div>
- 
+
 <!-- PAGE: SLEEP -->
 <div id="page-sleep" class="page">
   <div class="header"><h1>🌙 Sen i nastrój</h1></div>
@@ -312,7 +312,7 @@ textarea::placeholder,input::placeholder{color:var(--muted);}
   <div class="section-label">Ostatnie wpisy</div>
   <div id="sleep-history"></div>
 </div>
- 
+
 <!-- PAGE: HISTORY -->
 <div id="page-history" class="page">
   <div class="header"><h1>📊 Historia</h1></div>
@@ -333,7 +333,7 @@ textarea::placeholder,input::placeholder{color:var(--muted);}
   <div class="section-label">Historia 7 dni <span style="color:var(--muted);font-size:9px">(przytrzymaj wpis aby usunąć)</span></div>
   <div id="history-list"></div>
 </div>
- 
+
 <nav class="nav">
   <button class="nav-btn active" onclick="showPage('meds',this)"><span class="nav-icon">💊</span>Leki</button>
   <button class="nav-btn" onclick="showPage('symptoms',this)"><span class="nav-icon">📋</span>Objawy</button>
@@ -341,7 +341,7 @@ textarea::placeholder,input::placeholder{color:var(--muted);}
   <button class="nav-btn" onclick="showPage('sleep',this)"><span class="nav-icon">🌙</span>Sen</button>
   <button class="nav-btn" onclick="showPage('history',this)"><span class="nav-icon">📊</span>Historia</button>
 </nav>
- 
+
 <script>
 // ═══ SCHEDULES ═══
 const SCHEDULE_REGULAR = [
@@ -363,7 +363,7 @@ const SCHEDULE_REGULAR = [
   {time:"00:45",label:"Esoxx One",dose:"1 saszetka",note:"Małymi łykami przed snem",color:"#60a5fa",id:"esoxx"},
   {time:"00:45",label:"Gaviscon",dose:"płyn — NIE tabletki",note:"⚠️ Tabletki gazują i nasilają odbijanie!",color:"#2dd4bf",id:"gaviscon"},
 ];
- 
+
 const SCHEDULE_TRAINING = [
   {time:"09:30",label:"Euthyrox",dose:"wg lekarza",note:"⚠️ NA CZCZO — woda tylko. 60 min przed wszystkim.",color:"#f59e0b",id:"euthyrox"},
   {time:"10:00",label:"Prokit",dose:"50 mg",note:"Przed śniadaniem",color:"#10b981",id:"prokit1"},
@@ -386,7 +386,7 @@ const SCHEDULE_TRAINING = [
   {time:"00:45",label:"Esoxx One",dose:"1 saszetka",note:"Małymi łykami przed snem",color:"#60a5fa",id:"esoxx"},
   {time:"00:45",label:"Gaviscon",dose:"płyn — NIE tabletki",note:"⚠️ Po treningu refluks nocny bardziej prawdopodobny — koniecznie!",color:"#2dd4bf",id:"gaviscon"},
 ];
- 
+
 const MEAL_SCHEDULE_REGULAR = [
   {time:"10:30",label:"🍽️ Śniadanie","tip":"owsianka, jajka, banan, jogurt naturalny"},
   {time:"13:00",label:"🥗 Obiad","tip":"ryż/ziemniaki + białko + warzywa gotowane"},
@@ -395,7 +395,7 @@ const MEAL_SCHEDULE_REGULAR = [
   {time:"20:30",label:"🌙 Ostatnia przekąska","tip":"owsianka lub banan"},
   {time:"22:00",label:"🚫 STOP jedzenie","tip":"nic po tej godzinie"},
 ];
- 
+
 const MEAL_SCHEDULE_TRAINING = [
   {time:"10:30",label:"🍽️ Śniadanie","tip":"solidne — owsianka, jajka, jogurt"},
   {time:"13:00",label:"🥗 Obiad","tip":"solidniejszy — ryż + białko + warzywa"},
@@ -403,7 +403,7 @@ const MEAL_SCHEDULE_TRAINING = [
   {time:"22:00",label:"🔄 Post-trening","tip":"mały: banan, owsianka lub ryż z twarogiem"},
   {time:"23:00",label:"🚫 STOP jedzenie","tip":""},
 ];
- 
+
 // ═══ TRIGGERS ═══
 const TRIGGERS = [
   {words:["kawa","espresso","cappuccino","latte"],msg:"Kawa to Twój silny trigger — odbijanie i kaszel po ~15 min. Zamień na herbatę z rumianku."},
@@ -420,22 +420,22 @@ const TRIGGERS = [
   {words:["sok","napój gazowany","cola","fanta"],msg:"Soki i napoje gazowane są kwaśne lub gazowe — unikaj."},
   {words:["edamame","ciecierzyca","fasola","soczewica"],msg:"Strączki mogą nasilać gazy i odbijanie — szczególnie przy podejrzeniu SIBO."},
 ];
- 
+
 // ═══ STATE ═══
 const SYM_LABELS={odbijanie:"💨 Odbijanie",kaszel:"🤧 Kaszel",katar:"💧 Katar",bol:"🔴 Ból",gorzki:"😖 Gorzki smak",glos:"🎤 Gardło",nudnosci:"🌀 Nudności",stres:"😰 Stres",trening:"💃 Po treningu",dobre:"✅ Dobrze"};
 const SYM_COLORS={odbijanie:"#fb923c",kaszel:"#fb7185",katar:"#60a5fa",bol:"#f87171",gorzki:"#a78bfa",glos:"#2dd4bf",nudnosci:"#ec4899",stres:"#f472b6",trening:"#34d399",dobre:"#10b981"};
- 
+
 let dayType=localStorage.getItem('ht_daytype')||'regular';
-let selectedSyms=[],selIntVal={int:null,feel:null,sq:null,en:null},selMoodVal=null,selMealType="śniadanie";
+let selectedSyms=[],selIntVal={int:null,feel:null,sq:null,en:null},selMoodVal=null,currentMealType="śniadanie";
 let wSyms=[],wInt=null;
- 
+
 const today=()=>new Date().toISOString().slice(0,10);
 const nowTime=()=>new Date().toLocaleTimeString('pl-PL',{hour:'2-digit',minute:'2-digit'});
 const save=(k,v)=>localStorage.setItem(k,JSON.stringify(v));
 const load=(k,def=[])=>{try{return JSON.parse(localStorage.getItem(k))??def;}catch{return def;}};
 const todayKey=t=>`ht_${t}_${today()}`;
 const dateKey=(t,d)=>`ht_${t}_${d}`;
- 
+
 // ═══ NAV ═══
 function showPage(id,btn){
   document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
@@ -448,7 +448,7 @@ function showPage(id,btn){
   if(id==='sleep')renderSleepHistory();
   if(id==='history')renderHistory();
 }
- 
+
 // ═══ DAY TYPE ═══
 function setDayType(type){
   dayType=type;
@@ -457,7 +457,7 @@ function setDayType(type){
   document.getElementById('btn-training').className='day-toggle-btn'+(type==='training'?' active-training':'');
   renderMeds();
 }
- 
+
 // ═══ MEDS ═══
 function renderMeds(){
   const schedule=dayType==='training'?SCHEDULE_TRAINING:SCHEDULE_REGULAR;
@@ -478,7 +478,7 @@ function renderMeds(){
   });
   document.getElementById('meds-list').innerHTML=html;
 }
- 
+
 function toggleMed(id){
   const done=load(todayKey('meds'),{});
   done[id]=!done[id];save(todayKey('meds'),done);renderMeds();
@@ -488,7 +488,7 @@ function toggleMed(id){
     if(med)new Notification(`✓ ${med.label} wzięty`,{body:med.dose,tag:id+'_done'});
   }
 }
- 
+
 // ═══ WIDGET ═══
 function wToggle(btn){
   const s=btn.dataset.sym;
@@ -512,7 +512,7 @@ function wSave(){
   btn.textContent='✅ Zapisano!';btn.style.background='#10b981';
   setTimeout(()=>{btn.textContent='💾 Zapisz teraz';btn.style.background='var(--purple)';},1500);
 }
- 
+
 // ═══ WATER ═══
 const TOTAL_SIPS=16;
 function renderWater(){
@@ -524,7 +524,7 @@ function renderWater(){
 }
 function addSip(){let s=load(todayKey('water'),0);if(s>=TOTAL_SIPS)return;save(todayKey('water'),s+1);renderWater();}
 function resetWater(){save(todayKey('water'),0);renderWater();}
- 
+
 // ═══ SYMPTOMS ═══
 function toggleSym(btn){
   const s=btn.dataset.sym;btn.classList.toggle('selected');
@@ -561,7 +561,7 @@ function deleteSym(idx){
   if(!confirm('Usunąć ten wpis?'))return;
   const syms=load(todayKey('syms'));syms.splice(idx,1);save(todayKey('syms'),syms);renderSymptomsToday();
 }
- 
+
 // ═══ MEALS ═══
 function renderMealSchedule(){
   const schedule=dayType==='training'?MEAL_SCHEDULE_TRAINING:MEAL_SCHEDULE_REGULAR;
@@ -579,7 +579,7 @@ function renderMealSchedule(){
 }
 function selMealType(btn){
   document.querySelectorAll('.mt-btn').forEach(b=>b.classList.remove('sel'));
-  btn.classList.add('sel');selMealType=btn.dataset.type;
+  btn.classList.add('sel');currentMealType=btn.dataset.type;
 }
 function checkTriggers(val){
   const v=val.toLowerCase();
@@ -593,7 +593,7 @@ function saveMeal(){
   const input=document.getElementById('meal-input');
   if(!input.value.trim()){alert('Wpisz co zjadłaś');return;}
   const meals=load(todayKey('meals'));
-  meals.push({time:nowTime(),type:selMealType,food:input.value.trim(),feel:selIntVal.feel,ts:Date.now()});
+  meals.push({time:nowTime(),type:currentMealType,food:input.value.trim(),feel:selIntVal.feel,ts:Date.now()});
   save(todayKey('meals'),meals);
   input.value='';selIntVal.feel=null;
   document.querySelectorAll('.int-btn[data-feel]').forEach(b=>b.classList.remove('sel'));
@@ -616,7 +616,7 @@ function deleteMeal(idx){
   if(!confirm('Usunąć ten posiłek?'))return;
   const meals=load(todayKey('meals'));meals.splice(idx,1);save(todayKey('meals'),meals);renderMealsToday();
 }
- 
+
 // ═══ SLEEP ═══
 function selMoodBtn(btn){
   document.querySelectorAll('.mood-btn').forEach(b=>b.classList.remove('sel'));
@@ -652,7 +652,7 @@ function deleteSleep(displayIdx){
   const reversed=[...all].reverse();reversed.splice(displayIdx,1);
   save('ht_sleep_all',reversed.reverse());renderSleepHistory();
 }
- 
+
 // ═══ HISTORY ═══
 function renderHistory(){
   const done=load(todayKey('meds'),{});
@@ -688,7 +688,7 @@ function renderHistoryList(){
 }
 function deleteSymDate(ds,idx){if(!confirm('Usunąć?'))return;const s=load(dateKey('syms',ds));s.splice(idx,1);save(dateKey('syms',ds),s);renderHistoryList();}
 function deleteMealDate(ds,idx){if(!confirm('Usunąć?'))return;const m=load(dateKey('meals',ds));m.splice(idx,1);save(dateKey('meals',ds),m);renderHistoryList();}
- 
+
 // ═══ EXPORT ═══
 function generateExport(){
   let txt=`=== RAPORT ZDROWIA — ${new Date().toLocaleDateString('pl-PL')} ===\n\n`;
@@ -714,18 +714,18 @@ function copyExport(){
   const txt=document.getElementById('export-box').textContent;
   navigator.clipboard.writeText(txt).then(()=>alert('✅ Skopiowano!')).catch(()=>{const ta=document.createElement('textarea');ta.value=txt;document.body.appendChild(ta);ta.select();document.execCommand('copy');ta.remove();alert('✅ Skopiowano!');});
 }
- 
+
 // ═══ NOTIFICATIONS ═══
 async function requestNotifications(){
   if(!('Notification' in window)){alert('Użyj Safari na iPhone.');return;}
   const p=await Notification.requestPermission();
   if(p==='granted'){document.getElementById('notify-banner').style.display='none';scheduleAll();new Notification('Health Tracker 🎉',{body:'Powiadomienia włączone!'});}
 }
- 
+
 function scheduleAll(){
   const now=new Date();
   const schedule=dayType==='training'?SCHEDULE_TRAINING:SCHEDULE_REGULAR;
- 
+
   // Med notifications
   schedule.forEach(med=>{
     const[h,m]=med.time.split(':').map(Number);
@@ -738,7 +738,7 @@ function scheduleAll(){
       },delay);
     }
   });
- 
+
   // Meal notifications
   const mealSched=dayType==='training'?MEAL_SCHEDULE_TRAINING:MEAL_SCHEDULE_REGULAR;
   mealSched.forEach(meal=>{
@@ -752,7 +752,7 @@ function scheduleAll(){
       },delay);
     }
   });
- 
+
   // Water reminder every 45 min
   const wInterval=45*60*1000;
   setTimeout(function fw(){
@@ -762,7 +762,7 @@ function scheduleAll(){
     setTimeout(fw,wInterval);
   },wInterval);
 }
- 
+
 // ═══ INIT ═══
 function init(){
   document.getElementById('today-date').textContent=new Date().toLocaleDateString('pl-PL',{weekday:'long',day:'numeric',month:'long'});
@@ -775,4 +775,3 @@ init();
 </script>
 </body>
 </html>
- 
