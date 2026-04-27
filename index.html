@@ -572,7 +572,7 @@ function renderMealSchedule(){
     const past=t<now;
     return `<div style="display:flex;gap:8px;align-items:baseline;opacity:${past?0.5:1}">
       <span style="color:${past?'var(--muted)':'var(--amber)'};font-weight:700;font-size:11px;width:42px">${m.time}</span>
-      <span style="color:${past?'var(--muted)':'var(--text)'];font-size:12px">${m.label}</span>
+      <span style="color:${past?'var(--muted)':'var(--text)'};font-size:12px">${m.label}</span>
       ${m.tip?`<span style="color:var(--muted);font-size:11px">— ${m.tip}</span>`:''}
     </div>`;
   }).join('');
