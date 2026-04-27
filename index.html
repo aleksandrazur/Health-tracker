@@ -1,3 +1,4 @@
+<!DOCTYPE html>
 <html lang="pl">
 <head>
 <meta charset="UTF-8">
@@ -7,546 +8,769 @@
 <meta name="apple-mobile-web-app-title" content="Zdrowie">
 <title>Health Tracker</title>
 <style>
-  * { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
-  :root {
-    --bg: #080d1a; --card: #111827; --card2: #1e293b;
-    --amber: #f59e0b; --green: #10b981; --pink: #ec4899;
-    --purple: #a78bfa; --blue: #60a5fa; --orange: #fb923c;
-    --teal: #2dd4bf; --rose: #fb7185; --red: #f87171;
-    --text: #f1f5f9; --muted: #64748b; --border: #1e293b;
-  }
-  body { background: var(--bg); color: var(--text); font-family: -apple-system, Georgia, serif; min-height: 100vh; padding-bottom: 80px; }
-  
-  /* NAV */
-  .nav { position: fixed; bottom: 0; left: 0; right: 0; background: #0f172a; border-top: 1px solid var(--border); display: flex; z-index: 100; padding-bottom: env(safe-area-inset-bottom); }
-  .nav-btn { flex: 1; padding: 12px 4px 8px; border: none; background: none; color: var(--muted); font-size: 10px; cursor: pointer; display: flex; flex-direction: column; align-items: center; gap: 4px; transition: color 0.2s; }
-  .nav-btn.active { color: var(--amber); }
-  .nav-icon { font-size: 20px; }
+*{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent;}
+:root{
+  --bg:#080d1a;--card:#111827;--card2:#1e293b;
+  --amber:#f59e0b;--green:#10b981;--pink:#ec4899;
+  --purple:#a78bfa;--blue:#60a5fa;--orange:#fb923c;
+  --teal:#2dd4bf;--rose:#fb7185;--red:#f87171;
+  --text:#f1f5f9;--muted:#64748b;--border:#1e293b;
+}
+body{background:var(--bg);color:var(--text);font-family:-apple-system,Georgia,serif;min-height:100vh;padding-bottom:90px;}
+.nav{position:fixed;bottom:0;left:0;right:0;background:#0a0f1e;border-top:1px solid var(--border);display:flex;z-index:100;padding-bottom:env(safe-area-inset-bottom);}
+.nav-btn{flex:1;padding:10px 2px 6px;border:none;background:none;color:var(--muted);font-size:9px;cursor:pointer;display:flex;flex-direction:column;align-items:center;gap:3px;font-family:inherit;}
+.nav-btn.active{color:var(--amber);}
+.nav-icon{font-size:18px;}
+.page{display:none;padding:16px;max-width:480px;margin:0 auto;}
+.page.active{display:block;}
+.header{text-align:center;padding:12px 0 18px;}
+.header h1{font-size:20px;font-weight:800;}
+.header p{font-size:11px;color:var(--muted);margin-top:3px;}
+.card{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:14px;margin-bottom:10px;}
+.card-title{font-size:10px;text-transform:uppercase;letter-spacing:2px;margin-bottom:10px;}
+.section-label{font-size:10px;color:var(--muted);text-transform:uppercase;letter-spacing:2px;margin:14px 0 8px 4px;}
 
-  /* PAGES */
-  .page { display: none; padding: 16px; max-width: 480px; margin: 0 auto; }
-  .page.active { display: block; }
+/* DAY TYPE TOGGLE */
+.day-toggle{display:flex;background:#0f172a;border-radius:100px;padding:3px;border:1px solid var(--border);gap:3px;margin-bottom:14px;}
+.day-toggle-btn{flex:1;padding:8px;border-radius:100px;border:none;font-family:inherit;font-size:12px;font-weight:700;cursor:pointer;transition:all 0.2s;}
+.day-toggle-btn.active-regular{background:var(--amber);color:#080d1a;}
+.day-toggle-btn.active-training{background:var(--teal);color:#080d1a;}
+.day-toggle-btn:not(.active-regular):not(.active-training){background:none;color:var(--muted);}
 
-  /* HEADER */
-  .header { text-align: center; padding: 16px 0 24px; }
-  .header h1 { font-size: 22px; font-weight: 800; color: var(--text); }
-  .header p { font-size: 12px; color: var(--muted); margin-top: 4px; }
+/* MEDS */
+.progress-bar{height:5px;background:var(--card2);border-radius:3px;margin-bottom:14px;overflow:hidden;}
+.progress-fill{height:100%;background:linear-gradient(90deg,var(--amber),var(--green));border-radius:3px;transition:width 0.5s;}
+.med-time{font-size:10px;color:var(--amber);font-weight:700;margin:10px 0 4px;letter-spacing:1px;}
+.med-item{display:flex;align-items:center;gap:10px;padding:8px 10px;background:var(--card2);border-radius:8px;margin-bottom:4px;cursor:pointer;transition:opacity 0.2s;}
+.med-item.done{opacity:0.35;}
+.med-check{width:22px;height:22px;border-radius:50%;border:2px solid var(--muted);display:flex;align-items:center;justify-content:center;flex-shrink:0;font-size:12px;transition:all 0.2s;}
+.med-item.done .med-check{background:var(--green);border-color:var(--green);}
+.med-name{font-size:13px;font-weight:600;flex:1;}
+.med-dose{font-size:11px;color:var(--muted);}
+.med-note{font-size:11px;color:#fbbf24;margin-top:1px;padding-left:32px;margin-bottom:4px;}
+.training-badge{display:inline-block;padding:1px 7px;border-radius:20px;font-size:9px;font-weight:700;background:var(--teal);color:#080d1a;margin-left:6px;vertical-align:middle;}
 
-  /* CARDS */
-  .card { background: var(--card); border: 1px solid var(--border); border-radius: 12px; padding: 14px; margin-bottom: 10px; }
-  .card-title { font-size: 11px; text-transform: uppercase; letter-spacing: 2px; margin-bottom: 10px; }
+/* WATER */
+.water-section{background:var(--card);border:1px solid #1e4060;border-radius:12px;padding:14px;margin-bottom:10px;}
+.water-top{display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;}
+.water-title{font-size:10px;color:var(--blue);text-transform:uppercase;letter-spacing:2px;}
+.sips-grid{display:flex;flex-wrap:wrap;gap:5px;margin-bottom:10px;}
+.sip-dot{width:26px;height:26px;border-radius:50%;background:var(--card2);border:2px solid var(--border);cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:11px;transition:all 0.15s;}
+.sip-dot.filled{background:var(--blue);border-color:var(--blue);}
+.water-info{display:flex;justify-content:space-between;align-items:center;}
+.water-count-big{font-size:22px;font-weight:800;color:var(--blue);}
+.water-sub{font-size:10px;color:var(--muted);}
+.water-reset{padding:4px 10px;border-radius:20px;border:1px solid var(--border);background:none;color:var(--muted);font-size:11px;font-family:inherit;cursor:pointer;}
 
-  /* MED ITEMS */
-  .med-block { margin-bottom: 8px; }
-  .med-time { font-size: 10px; color: var(--amber); font-weight: 700; margin-bottom: 4px; letter-spacing: 1px; }
-  .med-item { display: flex; align-items: center; gap: 10px; padding: 8px 10px; background: var(--card2); border-radius: 8px; margin-bottom: 4px; cursor: pointer; transition: opacity 0.2s; }
-  .med-item.done { opacity: 0.4; }
-  .med-check { width: 20px; height: 20px; border-radius: 50%; border: 2px solid var(--muted); display: flex; align-items: center; justify-content: center; flex-shrink: 0; font-size: 11px; transition: all 0.2s; }
-  .med-item.done .med-check { background: var(--green); border-color: var(--green); }
-  .med-name { font-size: 13px; font-weight: 600; flex: 1; }
-  .med-dose { font-size: 11px; color: var(--muted); }
-  .med-note { font-size: 11px; color: #fbbf24; margin-top: 2px; padding-left: 30px; }
+/* QUICK WIDGET */
+.widget{background:linear-gradient(135deg,#0f172a,#1a0a2e);border:1px solid var(--purple);border-radius:14px;padding:14px;margin-bottom:10px;}
+.widget-title{font-size:10px;color:var(--purple);text-transform:uppercase;letter-spacing:2px;margin-bottom:10px;}
+.widget-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:6px;margin-bottom:8px;}
+.wq-btn{padding:10px 4px;border-radius:10px;border:2px solid transparent;background:var(--card2);color:var(--muted);font-size:12px;font-family:inherit;cursor:pointer;transition:all 0.15s;text-align:center;}
+.wq-btn.sel{color:#080d1a;font-weight:700;}
+.wq-btn[data-sym="odbijanie"].sel{background:var(--orange);border-color:var(--orange);}
+.wq-btn[data-sym="kaszel"].sel{background:var(--rose);border-color:var(--rose);}
+.wq-btn[data-sym="katar"].sel{background:var(--blue);border-color:var(--blue);}
+.wq-btn[data-sym="bol"].sel{background:var(--red);border-color:var(--red);}
+.wq-btn[data-sym="gorzki"].sel{background:var(--purple);border-color:var(--purple);}
+.wq-btn[data-sym="glos"].sel{background:var(--teal);border-color:var(--teal);}
+.wq-btn[data-sym="nudnosci"].sel{background:var(--pink);border-color:var(--pink);}
+.wq-btn[data-sym="stres"].sel{background:#f472b6;border-color:#f472b6;}
+.wq-btn[data-sym="dobre"].sel{background:var(--green);border-color:var(--green);}
+.widget-int{display:flex;gap:5px;margin-bottom:8px;}
+.wi-btn{flex:1;padding:6px;border-radius:8px;border:1px solid var(--border);background:var(--card2);color:var(--muted);font-size:12px;font-family:inherit;cursor:pointer;transition:all 0.2s;}
+.wi-btn.sel{background:var(--amber);border-color:var(--amber);color:#080d1a;font-weight:700;}
+.widget-save{width:100%;padding:10px;border-radius:10px;border:none;background:var(--purple);color:#080d1a;font-family:inherit;font-size:13px;font-weight:700;cursor:pointer;}
 
-  /* SYMPTOM LOG */
-  .symptom-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-bottom: 12px; }
-  .sym-btn { padding: 10px 8px; border-radius: 10px; border: 1px solid var(--border); background: var(--card2); color: var(--muted); font-size: 12px; font-family: inherit; cursor: pointer; text-align: center; transition: all 0.2s; }
-  .sym-btn.selected { color: var(--bg); font-weight: 700; }
-  .sym-btn[data-sym="bekanie"].selected { background: var(--orange); border-color: var(--orange); }
-  .sym-btn[data-sym="kaszel"].selected { background: var(--rose); border-color: var(--rose); }
-  .sym-btn[data-sym="katar"].selected { background: var(--blue); border-color: var(--blue); }
-  .sym-btn[data-sym="bol"].selected { background: var(--red); border-color: var(--red); }
-  .sym-btn[data-sym="gorzki"].selected { background: var(--purple); border-color: var(--purple); }
-  .sym-btn[data-sym="glos"].selected { background: var(--teal); border-color: var(--teal); }
-  .sym-btn[data-sym="nudnosci"].selected { background: var(--pink); border-color: var(--pink); }
-  .sym-btn[data-sym="dobre"].selected { background: var(--green); border-color: var(--green); }
+/* SYMPTOMS FULL */
+.symptom-grid{display:grid;grid-template-columns:1fr 1fr;gap:6px;margin-bottom:10px;}
+.sym-btn{padding:9px 6px;border-radius:10px;border:1px solid var(--border);background:var(--card2);color:var(--muted);font-size:12px;font-family:inherit;cursor:pointer;transition:all 0.2s;}
+.sym-btn.selected{color:#080d1a;font-weight:700;}
+.sym-btn[data-sym="odbijanie"].selected{background:var(--orange);border-color:var(--orange);}
+.sym-btn[data-sym="kaszel"].selected{background:var(--rose);border-color:var(--rose);}
+.sym-btn[data-sym="katar"].selected{background:var(--blue);border-color:var(--blue);}
+.sym-btn[data-sym="bol"].selected{background:var(--red);border-color:var(--red);}
+.sym-btn[data-sym="gorzki"].selected{background:var(--purple);border-color:var(--purple);}
+.sym-btn[data-sym="glos"].selected{background:var(--teal);border-color:var(--teal);}
+.sym-btn[data-sym="nudnosci"].selected{background:var(--pink);border-color:var(--pink);}
+.sym-btn[data-sym="stres"].selected{background:#f472b6;border-color:#f472b6;}
+.sym-btn[data-sym="trening"].selected{background:#34d399;border-color:#34d399;}
+.sym-btn[data-sym="dobre"].selected{background:var(--green);border-color:var(--green);}
+.int-row{display:flex;gap:5px;margin-bottom:10px;}
+.int-btn{flex:1;padding:7px;border-radius:8px;border:1px solid var(--border);background:var(--card2);color:var(--muted);font-size:12px;font-family:inherit;cursor:pointer;transition:all 0.2s;}
+.int-btn.sel{background:var(--amber);border-color:var(--amber);color:#080d1a;font-weight:700;}
+.int-label{font-size:11px;color:var(--muted);margin-bottom:5px;}
+textarea,input[type=text]{width:100%;background:var(--card2);border:1px solid var(--border);border-radius:8px;padding:10px;color:var(--text);font-family:inherit;font-size:13px;outline:none;}
+textarea{resize:none;}
+textarea::placeholder,input::placeholder{color:var(--muted);}
+.mb8{margin-bottom:8px;}
+.btn{width:100%;padding:12px;border-radius:10px;border:none;font-family:inherit;font-size:14px;font-weight:700;cursor:pointer;margin-top:6px;}
+.btn-amber{background:var(--amber);color:#080d1a;}
+.btn-green{background:var(--green);color:#080d1a;}
+.btn-muted{background:var(--card2);color:var(--muted);}
+.btn-blue{background:var(--blue);color:#080d1a;}
+.btn-purple{background:var(--purple);color:#080d1a;}
 
-  .intensity { margin-bottom: 12px; }
-  .intensity label { font-size: 12px; color: var(--muted); display: block; margin-bottom: 6px; }
-  .intensity-row { display: flex; gap: 6px; }
-  .int-btn { flex: 1; padding: 8px; border-radius: 8px; border: 1px solid var(--border); background: var(--card2); color: var(--muted); font-size: 13px; font-family: inherit; cursor: pointer; transition: all 0.2s; }
-  .int-btn.selected { background: var(--amber); border-color: var(--amber); color: var(--bg); font-weight: 700; }
+/* LOG ITEMS */
+.log-item{background:var(--card2);border-radius:10px;padding:10px 12px;margin-bottom:7px;position:relative;}
+.log-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:3px;}
+.log-time{font-size:11px;color:var(--amber);font-weight:700;}
+.log-type{font-size:10px;color:var(--muted);text-transform:uppercase;letter-spacing:1px;}
+.log-syms{display:flex;flex-wrap:wrap;gap:3px;margin-top:4px;}
+.log-sym{padding:2px 7px;border-radius:20px;font-size:10px;font-weight:600;}
+.log-note{font-size:11px;color:var(--muted);margin-top:3px;line-height:1.4;}
+.del-btn{position:absolute;top:8px;right:10px;background:none;border:none;color:#374151;font-size:16px;cursor:pointer;padding:2px 6px;border-radius:6px;}
+.del-btn:hover{color:var(--red);background:#1a0a0a;}
+.empty{text-align:center;color:var(--muted);font-size:13px;padding:20px;}
 
-  textarea { width: 100%; background: var(--card2); border: 1px solid var(--border); border-radius: 8px; padding: 10px; color: var(--text); font-family: inherit; font-size: 13px; resize: none; outline: none; margin-bottom: 10px; }
-  textarea::placeholder { color: var(--muted); }
+/* MEAL */
+.meal-types{display:flex;gap:5px;flex-wrap:wrap;margin-bottom:8px;}
+.mt-btn{padding:5px 11px;border-radius:20px;border:1px solid var(--border);background:var(--card2);color:var(--muted);font-size:12px;font-family:inherit;cursor:pointer;transition:all 0.2s;}
+.mt-btn.sel{background:var(--green);border-color:var(--green);color:#080d1a;font-weight:700;}
+.trigger-alert{background:#2d1515;border:1px solid var(--red);border-radius:8px;padding:10px 12px;margin-bottom:8px;font-size:12px;color:var(--red);display:none;}
 
-  .btn { width: 100%; padding: 12px; border-radius: 10px; border: none; font-family: inherit; font-size: 14px; font-weight: 700; cursor: pointer; transition: all 0.2s; }
-  .btn-primary { background: var(--amber); color: var(--bg); }
-  .btn-secondary { background: var(--card2); color: var(--muted); margin-top: 6px; }
+/* SLEEP */
+.sleep-row{display:flex;gap:8px;margin-bottom:8px;}
+.sleep-half{flex:1;}
+.sleep-label{font-size:11px;color:var(--muted);margin-bottom:4px;}
+.mood-row{display:flex;gap:5px;margin-bottom:10px;}
+.mood-btn{flex:1;padding:8px 4px;border-radius:8px;border:1px solid var(--border);background:var(--card2);font-size:18px;cursor:pointer;transition:all 0.2s;text-align:center;}
+.mood-btn.sel{border-color:var(--amber);background:#1a1500;}
 
-  /* LOG ITEMS */
-  .log-item { background: var(--card2); border-radius: 10px; padding: 10px 12px; margin-bottom: 8px; }
-  .log-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 4px; }
-  .log-time { font-size: 11px; color: var(--amber); font-weight: 700; }
-  .log-type { font-size: 10px; color: var(--muted); text-transform: uppercase; letter-spacing: 1px; }
-  .log-syms { display: flex; flex-wrap: wrap; gap: 4px; margin-top: 4px; }
-  .log-sym { padding: 2px 8px; border-radius: 20px; font-size: 11px; font-weight: 600; background: #1e293b; }
-  .log-note { font-size: 12px; color: var(--muted); margin-top: 4px; }
-  .log-int { font-size: 11px; margin-top: 2px; }
-
-  /* MEAL LOG */
-  .meal-input { background: var(--card2); border: 1px solid var(--border); border-radius: 8px; padding: 10px; color: var(--text); font-family: inherit; font-size: 13px; width: 100%; outline: none; margin-bottom: 8px; }
-  .meal-input::placeholder { color: var(--muted); }
-  .meal-type-row { display: flex; gap: 6px; margin-bottom: 10px; flex-wrap: wrap; }
-  .meal-type-btn { padding: 6px 12px; border-radius: 20px; border: 1px solid var(--border); background: var(--card2); color: var(--muted); font-size: 12px; font-family: inherit; cursor: pointer; transition: all 0.2s; }
-  .meal-type-btn.selected { background: var(--green); border-color: var(--green); color: var(--bg); font-weight: 700; }
-
-  /* HISTORY */
-  .day-section { margin-bottom: 16px; }
-  .day-label { font-size: 11px; color: var(--muted); text-transform: uppercase; letter-spacing: 2px; margin-bottom: 8px; padding-left: 4px; }
-
-  /* PROGRESS */
-  .progress-bar { height: 4px; background: var(--card2); border-radius: 2px; margin-top: 10px; overflow: hidden; }
-  .progress-fill { height: 100%; background: var(--green); border-radius: 2px; transition: width 0.5s; }
-
-  /* NOTIFY BANNER */
-  .notify-banner { background: #1a1a2e; border: 1px solid var(--purple); border-radius: 10px; padding: 12px; margin-bottom: 12px; display: flex; gap: 10px; align-items: center; }
-  .notify-banner p { font-size: 12px; color: var(--muted); flex: 1; }
-  .notify-btn { padding: 6px 12px; border-radius: 20px; border: none; background: var(--purple); color: var(--bg); font-size: 12px; font-family: inherit; font-weight: 700; cursor: pointer; white-space: nowrap; }
-
-  .empty { text-align: center; color: var(--muted); font-size: 13px; padding: 24px; }
-
-  /* WATER */
-  .water-row { display: flex; gap: 8px; align-items: center; }
-  .water-btn { width: 40px; height: 40px; border-radius: 50%; border: none; background: var(--blue); color: var(--bg); font-size: 18px; cursor: pointer; display: flex; align-items: center; justify-content: center; }
-  .water-count { font-size: 24px; font-weight: 800; color: var(--blue); flex: 1; text-align: center; }
-  .water-label { font-size: 11px; color: var(--muted); text-align: center; }
-
-  .section-label { font-size: 11px; color: var(--muted); text-transform: uppercase; letter-spacing: 2px; margin: 16px 0 8px 4px; }
-
-  .today-summary { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 8px; margin-bottom: 12px; }
-  .summary-card { background: var(--card); border-radius: 10px; padding: 10px; text-align: center; border: 1px solid var(--border); }
-  .summary-num { font-size: 24px; font-weight: 800; }
-  .summary-label { font-size: 10px; color: var(--muted); margin-top: 2px; }
+/* HISTORY */
+.summary-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:7px;margin-bottom:12px;}
+.sum-card{background:var(--card);border-radius:10px;padding:10px;text-align:center;border:1px solid var(--border);}
+.sum-num{font-size:22px;font-weight:800;}
+.sum-label{font-size:10px;color:var(--muted);margin-top:2px;}
+.day-section{margin-bottom:14px;}
+.day-label{font-size:10px;color:var(--muted);text-transform:uppercase;letter-spacing:2px;margin-bottom:7px;padding-left:2px;}
+.pat-row{display:flex;align-items:center;gap:8px;margin-bottom:7px;}
+.pat-name{font-size:12px;width:110px;flex-shrink:0;}
+.pat-bar-bg{flex:1;background:var(--card2);border-radius:3px;height:7px;overflow:hidden;}
+.pat-bar{height:100%;border-radius:3px;}
+.pat-count{font-size:11px;color:var(--muted);width:22px;text-align:right;}
+.export-box{background:var(--card2);border-radius:8px;padding:12px;font-size:11px;color:var(--muted);line-height:1.7;margin-bottom:8px;white-space:pre-wrap;word-break:break-word;max-height:200px;overflow-y:auto;display:none;}
+.notify-banner{background:#0f0a1e;border:1px solid var(--purple);border-radius:10px;padding:11px;margin-bottom:10px;display:flex;gap:10px;align-items:center;}
+.notify-banner p{font-size:12px;color:var(--muted);flex:1;}
+.notify-btn{padding:6px 12px;border-radius:20px;border:none;background:var(--purple);color:#080d1a;font-size:12px;font-family:inherit;font-weight:700;cursor:pointer;white-space:nowrap;}
 </style>
 </head>
 <body>
 
-<!-- PAGES -->
+<!-- PAGE: MEDS -->
 <div id="page-meds" class="page active">
   <div class="header">
     <h1>💊 Leki</h1>
     <p id="today-date"></p>
   </div>
   <div id="notify-banner" class="notify-banner" style="display:none">
-    <p>🔔 Włącz powiadomienia żeby dostawać przypomnienia o lekach</p>
+    <p>🔔 Włącz powiadomienia o lekach, posiłkach i wodzie</p>
     <button class="notify-btn" onclick="requestNotifications()">Włącz</button>
   </div>
-  <div class="progress-bar" style="margin-bottom:16px">
-    <div class="progress-fill" id="med-progress" style="width:0%"></div>
+
+  <!-- DAY TYPE TOGGLE -->
+  <div class="day-toggle">
+    <button class="day-toggle-btn active-regular" id="btn-regular" onclick="setDayType('regular')">🗓 Dzień zwykły</button>
+    <button class="day-toggle-btn" id="btn-training" onclick="setDayType('training')">💃 Dzień treningowy</button>
   </div>
+
+  <div class="progress-bar"><div class="progress-fill" id="med-progress" style="width:0%"></div></div>
+
+  <!-- QUICK WIDGET -->
+  <div class="widget">
+    <div class="widget-title">⚡ Szybki log objawów</div>
+    <div class="widget-grid" id="widget-grid">
+      <button class="wq-btn" data-sym="odbijanie" onclick="wToggle(this)">💨 Odbijanie</button>
+      <button class="wq-btn" data-sym="kaszel" onclick="wToggle(this)">🤧 Kaszel</button>
+      <button class="wq-btn" data-sym="katar" onclick="wToggle(this)">💧 Katar</button>
+      <button class="wq-btn" data-sym="bol" onclick="wToggle(this)">🔴 Ból</button>
+      <button class="wq-btn" data-sym="gorzki" onclick="wToggle(this)">😖 Gorzki</button>
+      <button class="wq-btn" data-sym="glos" onclick="wToggle(this)">🎤 Gardło</button>
+      <button class="wq-btn" data-sym="nudnosci" onclick="wToggle(this)">🌀 Nudności</button>
+      <button class="wq-btn" data-sym="stres" onclick="wToggle(this)">😰 Stres</button>
+      <button class="wq-btn" data-sym="dobre" onclick="wToggle(this)">✅ Dobrze</button>
+    </div>
+    <div class="widget-int" id="widget-int">
+      <button class="wi-btn" data-wi="1" onclick="wSelInt(this)">😌 Lekko</button>
+      <button class="wi-btn" data-wi="2" onclick="wSelInt(this)">😟 Średnio</button>
+      <button class="wi-btn" data-wi="3" onclick="wSelInt(this)">😣 Mocno</button>
+    </div>
+    <button class="widget-save" onclick="wSave()">💾 Zapisz teraz</button>
+  </div>
+
+  <!-- WATER -->
+  <div class="water-section">
+    <div class="water-top">
+      <span class="water-title">💧 Woda — małe łyki</span>
+      <button class="water-reset" onclick="resetWater()">Reset</button>
+    </div>
+    <div class="sips-grid" id="sips-grid"></div>
+    <div class="water-info">
+      <div>
+        <div class="water-count-big"><span id="sip-count">0</span><span style="font-size:13px;color:var(--muted)">/16 łyków</span></div>
+        <div class="water-sub">~800ml dziennie</div>
+      </div>
+    </div>
+  </div>
+
   <div id="meds-list"></div>
 </div>
 
+<!-- PAGE: SYMPTOMS -->
 <div id="page-symptoms" class="page">
-  <div class="header"><h1>📋 Objawy</h1><p>Zaloguj jak się czujesz</p></div>
+  <div class="header"><h1>📋 Objawy</h1><p>Szczegółowy log</p></div>
   <div class="card">
-    <div class="card-title" style="color:var(--rose)">Co czujesz?</div>
+    <div class="card-title" style="color:var(--rose)">Wybierz objawy</div>
     <div class="symptom-grid">
-      <button class="sym-btn" data-sym="bekanie" onclick="toggleSym(this)">💨 Bekanie</button>
+      <button class="sym-btn" data-sym="odbijanie" onclick="toggleSym(this)">💨 Odbijanie</button>
       <button class="sym-btn" data-sym="kaszel" onclick="toggleSym(this)">🤧 Kaszel</button>
       <button class="sym-btn" data-sym="katar" onclick="toggleSym(this)">💧 Katar</button>
       <button class="sym-btn" data-sym="bol" onclick="toggleSym(this)">🔴 Ból brzucha</button>
       <button class="sym-btn" data-sym="gorzki" onclick="toggleSym(this)">😖 Gorzki smak</button>
       <button class="sym-btn" data-sym="glos" onclick="toggleSym(this)">🎤 Gardło/głos</button>
       <button class="sym-btn" data-sym="nudnosci" onclick="toggleSym(this)">🌀 Nudności</button>
+      <button class="sym-btn" data-sym="stres" onclick="toggleSym(this)">😰 Stres</button>
+      <button class="sym-btn" data-sym="trening" onclick="toggleSym(this)">💃 Po treningu</button>
       <button class="sym-btn" data-sym="dobre" onclick="toggleSym(this)">✅ Czuję się dobrze</button>
     </div>
-    <div class="intensity">
-      <label>Intensywność:</label>
-      <div class="intensity-row">
-        <button class="int-btn" data-int="1" onclick="selectInt(this)">😌 Lekko</button>
-        <button class="int-btn" data-int="2" onclick="selectInt(this)">😟 Średnio</button>
-        <button class="int-btn" data-int="3" onclick="selectInt(this)">😣 Mocno</button>
-      </div>
+    <div class="int-label">Intensywność:</div>
+    <div class="int-row">
+      <button class="int-btn" data-int="1" onclick="selInt(this,'int')">😌 Lekko</button>
+      <button class="int-btn" data-int="2" onclick="selInt(this,'int')">😟 Średnio</button>
+      <button class="int-btn" data-int="3" onclick="selInt(this,'int')">😣 Mocno</button>
     </div>
-    <textarea id="sym-note" rows="2" placeholder="Notatka (opcjonalnie) — co jadłaś, trening, stres..."></textarea>
-    <button class="btn btn-primary" onclick="saveSymptom()">Zapisz</button>
+    <textarea id="sym-note" rows="2" placeholder="Notatka — co jadłaś, trening, stres..." class="mb8"></textarea>
+    <button class="btn btn-amber" onclick="saveSymptom()">💾 Zapisz objawy</button>
   </div>
-  <div class="section-label">Dzisiaj</div>
+  <div class="section-label">Dziś</div>
   <div id="symptoms-today"></div>
 </div>
 
+<!-- PAGE: FOOD -->
 <div id="page-food" class="page">
   <div class="header"><h1>🍽️ Posiłki</h1><p>Co i kiedy jesz</p></div>
+  <div class="card" style="background:#0a1a0f;border-color:#10b98133;">
+    <div class="card-title" style="color:var(--green)">Plan posiłków dziś</div>
+    <div id="meal-schedule" style="font-size:12px;line-height:2;color:var(--muted);"></div>
+  </div>
   <div class="card">
     <div class="card-title" style="color:var(--green)">Dodaj posiłek</div>
-    <div class="meal-type-row" id="meal-types">
-      <button class="meal-type-btn selected" data-type="śniadanie" onclick="selectMealType(this)">Śniadanie</button>
-      <button class="meal-type-btn" data-type="obiad" onclick="selectMealType(this)">Obiad</button>
-      <button class="meal-type-btn" data-type="kolacja" onclick="selectMealType(this)">Kolacja</button>
-      <button class="meal-type-btn" data-type="przekąska" onclick="selectMealType(this)">Przekąska</button>
+    <div class="meal-types">
+      <button class="mt-btn sel" data-type="śniadanie" onclick="selMealType(this)">Śniadanie</button>
+      <button class="mt-btn" data-type="obiad" onclick="selMealType(this)">Obiad</button>
+      <button class="mt-btn" data-type="kolacja" onclick="selMealType(this)">Kolacja</button>
+      <button class="mt-btn" data-type="przekąska" onclick="selMealType(this)">Przekąska</button>
+      <button class="mt-btn" data-type="pre-trening" onclick="selMealType(this)">Pre-trening</button>
+      <button class="mt-btn" data-type="post-trening" onclick="selMealType(this)">Post-trening</button>
     </div>
-    <input class="meal-input" id="meal-input" placeholder="Co zjadłaś? (np. owsianka z bananem)" />
-    <div class="intensity" style="margin-bottom:10px">
-      <label>Jak się poczułaś po jedzeniu?</label>
-      <div class="intensity-row">
-        <button class="int-btn" data-feel="dobrze" onclick="selectFeel(this)">😊 Dobrze</button>
-        <button class="int-btn" data-feel="ok" onclick="selectFeel(this)">😐 OK</button>
-        <button class="int-btn" data-feel="zle" onclick="selectFeel(this)">😟 Źle</button>
-      </div>
+    <input type="text" id="meal-input" placeholder="Co zjadłaś? (np. owsianka z bananem)" class="mb8" oninput="checkTriggers(this.value)">
+    <div class="trigger-alert" id="trigger-alert">⚠️ <span id="trigger-msg"></span></div>
+    <div class="int-label">Jak się poczułaś po jedzeniu?</div>
+    <div class="int-row">
+      <button class="int-btn" data-feel="dobrze" onclick="selInt(this,'feel')">😊 Dobrze</button>
+      <button class="int-btn" data-feel="ok" onclick="selInt(this,'feel')">😐 OK</button>
+      <button class="int-btn" data-feel="zle" onclick="selInt(this,'feel')">😟 Źle</button>
     </div>
-    <button class="btn btn-primary" onclick="saveMeal()">Zapisz posiłek</button>
+    <button class="btn btn-green" onclick="saveMeal()">💾 Zapisz posiłek</button>
   </div>
-  <div class="section-label">Dzisiaj</div>
+  <div class="section-label">Dziś</div>
   <div id="meals-today"></div>
 </div>
 
-<div id="page-history" class="page">
-  <div class="header"><h1>📊 Historia</h1><p>Ostatnie 7 dni</p></div>
-  <div class="today-summary">
-    <div class="summary-card">
-      <div class="summary-num" id="sum-meds" style="color:var(--amber)">0</div>
-      <div class="summary-label">Leki wzięte</div>
+<!-- PAGE: SLEEP -->
+<div id="page-sleep" class="page">
+  <div class="header"><h1>🌙 Sen i nastrój</h1></div>
+  <div class="card">
+    <div class="card-title" style="color:var(--purple)">Dzisiejszy sen</div>
+    <div class="sleep-row">
+      <div class="sleep-half"><div class="sleep-label">Zasnęłam</div><input type="text" id="sleep-start" placeholder="np. 01:30" class="mb8"></div>
+      <div class="sleep-half"><div class="sleep-label">Wstałam</div><input type="text" id="sleep-end" placeholder="np. 09:30" class="mb8"></div>
     </div>
-    <div class="summary-card">
-      <div class="summary-num" id="sum-syms" style="color:var(--rose)">0</div>
-      <div class="summary-label">Objawy dziś</div>
+    <div class="int-label">Jakość snu:</div>
+    <div class="int-row">
+      <button class="int-btn" data-sq="1" onclick="selInt(this,'sq')">😴 Słaby</button>
+      <button class="int-btn" data-sq="2" onclick="selInt(this,'sq')">😐 OK</button>
+      <button class="int-btn" data-sq="3" onclick="selInt(this,'sq')">😊 Dobry</button>
     </div>
-    <div class="summary-card">
-      <div class="summary-num" id="sum-meals" style="color:var(--green)">0</div>
-      <div class="summary-label">Posiłki dziś</div>
+    <div class="card-title" style="color:var(--amber);margin-top:4px">Nastrój rano</div>
+    <div class="mood-row">
+      <button class="mood-btn" data-mood="1" onclick="selMoodBtn(this)">😩</button>
+      <button class="mood-btn" data-mood="2" onclick="selMoodBtn(this)">😟</button>
+      <button class="mood-btn" data-mood="3" onclick="selMoodBtn(this)">😐</button>
+      <button class="mood-btn" data-mood="4" onclick="selMoodBtn(this)">🙂</button>
+      <button class="mood-btn" data-mood="5" onclick="selMoodBtn(this)">😄</button>
     </div>
+    <div class="int-label">Energia:</div>
+    <div class="int-row">
+      <button class="int-btn" data-en="1" onclick="selInt(this,'en')">🪫 Brak</button>
+      <button class="int-btn" data-en="2" onclick="selInt(this,'en')">😴 Niski</button>
+      <button class="int-btn" data-en="3" onclick="selInt(this,'en')">⚡ Dobry</button>
+    </div>
+    <textarea id="sleep-note" rows="2" placeholder="Jak się obudziłaś, katar rano, kaszel..." class="mb8"></textarea>
+    <button class="btn btn-purple" onclick="saveSleep()">💾 Zapisz</button>
   </div>
-  <div class="section-label">Wzorce objawów</div>
-  <div id="pattern-analysis" class="card"></div>
-  <div class="section-label">Historia</div>
+  <div class="section-label">Ostatnie wpisy</div>
+  <div id="sleep-history"></div>
+</div>
+
+<!-- PAGE: HISTORY -->
+<div id="page-history" class="page">
+  <div class="header"><h1>📊 Historia</h1></div>
+  <div class="summary-grid">
+    <div class="sum-card"><div class="sum-num" id="sum-meds" style="color:var(--amber)">0</div><div class="sum-label">Leki dziś</div></div>
+    <div class="sum-card"><div class="sum-num" id="sum-syms" style="color:var(--rose)">0</div><div class="sum-label">Objawy dziś</div></div>
+    <div class="sum-card"><div class="sum-num" id="sum-meals" style="color:var(--green)">0</div><div class="sum-label">Posiłki dziś</div></div>
+  </div>
+  <div class="section-label">Wzorce objawów (7 dni)</div>
+  <div class="card" id="pattern-card"></div>
+  <div class="section-label">Eksport do Claude</div>
+  <div class="card">
+    <div style="font-size:12px;color:var(--muted);margin-bottom:8px">Wygeneruj raport 7 dni i wklej go w rozmowie z Claude.</div>
+    <button class="btn btn-blue" onclick="generateExport()">📋 Generuj raport</button>
+    <div class="export-box" id="export-box"></div>
+    <button class="btn btn-muted" id="copy-btn" style="display:none" onclick="copyExport()">📋 Kopiuj do schowka</button>
+  </div>
+  <div class="section-label">Historia 7 dni <span style="color:var(--muted);font-size:9px">(przytrzymaj wpis aby usunąć)</span></div>
   <div id="history-list"></div>
 </div>
 
-<!-- NAV -->
 <nav class="nav">
-  <button class="nav-btn active" onclick="showPage('meds', this)">
-    <span class="nav-icon">💊</span>Leki
-  </button>
-  <button class="nav-btn" onclick="showPage('symptoms', this)">
-    <span class="nav-icon">📋</span>Objawy
-  </button>
-  <button class="nav-btn" onclick="showPage('food', this)">
-    <span class="nav-icon">🍽️</span>Posiłki
-  </button>
-  <button class="nav-btn" onclick="showPage('history', this)">
-    <span class="nav-icon">📊</span>Historia
-  </button>
+  <button class="nav-btn active" onclick="showPage('meds',this)"><span class="nav-icon">💊</span>Leki</button>
+  <button class="nav-btn" onclick="showPage('symptoms',this)"><span class="nav-icon">📋</span>Objawy</button>
+  <button class="nav-btn" onclick="showPage('food',this)"><span class="nav-icon">🍽️</span>Posiłki</button>
+  <button class="nav-btn" onclick="showPage('sleep',this)"><span class="nav-icon">🌙</span>Sen</button>
+  <button class="nav-btn" onclick="showPage('history',this)"><span class="nav-icon">📊</span>Historia</button>
 </nav>
 
 <script>
-// ═══════════════════════════════════
-// DATA
-// ═══════════════════════════════════
-const SCHEDULE = [
-  { time: "07:55", label: "Euthyrox", dose: "wg lekarza", note: "⚠️ NA CZCZO — woda tylko. 60 min przed wszystkim.", color: "#f59e0b", id: "euthyrox" },
-  { time: "09:30", label: "Prokit", dose: "50 mg", note: "Przed śniadaniem", color: "#10b981", id: "prokit1" },
-  { time: "10:00", label: "Famotydyna", dose: "20 mg", note: "15-30 min przed śniadaniem", color: "#ec4899", id: "fam1" },
-  { time: "10:30", label: "Elvanse", dose: "70 mg", note: "Z posiłkiem", color: "#818cf8", id: "elvanse" },
-  { time: "10:30", label: "Lamitrin", dose: "100 mg", note: "Z posiłkiem — pierwsza dawka", color: "#a78bfa", id: "lamitrin1" },
-  { time: "10:30", label: "Strattera", dose: "25 mg", note: "Z posiłkiem", color: "#7dd3fc", id: "strattera" },
-  { time: "10:30", label: "Kwas foliowy", dose: "1 tabletka", note: "Z posiłkiem", color: "#86efac", id: "folik" },
-  { time: "10:30", label: "Omega-3", dose: "wg ulotki", note: "Z posiłkiem", color: "#fda4af", id: "omega" },
-  { time: "12:00", label: "Prokit", dose: "50 mg", note: "Przed obiadem", color: "#10b981", id: "prokit2" },
-  { time: "13:30", label: "Ascofer", dose: "wg ulotki", note: "⚠️ Min. 4h po Euthyrox. Popić wodą.", color: "#fb923c", id: "ascofer" },
-  { time: "15:30", label: "Famotydyna", dose: "20 mg", note: "Min. 2h po Ascoferie", color: "#ec4899", id: "fam2" },
-  { time: "18:00", label: "Prokit", dose: "50 mg", note: "Przed kolacją", color: "#10b981", id: "prokit3" },
-  { time: "18:30", label: "Bupropion", dose: "300 mg", note: "Z kolacją", color: "#818cf8", id: "bupropion" },
-  { time: "18:30", label: "Lamitrin", dose: "100 mg", note: "Z kolacją — druga dawka", color: "#a78bfa", id: "lamitrin2" },
-  { time: "22:00", label: "NeoBianacid", dose: "1 tabletka", note: "Ssać powoli. Min. 2h przed Lamotrygniną.", color: "#fb7185", id: "neobianacid" },
-  { time: "00:00", label: "Famotydyna", dose: "40 mg", note: "Nocna dawka", color: "#ec4899", id: "fam3" },
-  { time: "00:45", label: "Esoxx One", dose: "1 saszetka", note: "Małymi łykami przed snem", color: "#60a5fa", id: "esoxx" },
-  { time: "00:45", label: "Gaviscon", dose: "płyn/saszetka", note: "Po Esoxx — NIE tabletki (gazują!)", color: "#2dd4bf", id: "gaviscon" },
+// ═══ SCHEDULES ═══
+const SCHEDULE_REGULAR = [
+  {time:"09:30",label:"Euthyrox",dose:"wg lekarza",note:"⚠️ NA CZCZO — woda tylko. 60 min przed wszystkim.",color:"#f59e0b",id:"euthyrox"},
+  {time:"10:00",label:"Prokit",dose:"50 mg",note:"Przed śniadaniem",color:"#10b981",id:"prokit1"},
+  {time:"10:00",label:"Famotydyna",dose:"20 mg",note:"15-30 min przed śniadaniem",color:"#ec4899",id:"fam1"},
+  {time:"10:30",label:"Elvanse",dose:"70 mg",note:"Z posiłkiem",color:"#818cf8",id:"elvanse"},
+  {time:"10:30",label:"Lamitrin",dose:"100 mg",note:"Pierwsza dawka — z posiłkiem",color:"#a78bfa",id:"lamitrin1"},
+  {time:"10:30",label:"Kwas foliowy",dose:"1 tabletka",note:"Z posiłkiem",color:"#86efac",id:"folik"},
+  {time:"10:30",label:"Omega-3",dose:"wg ulotki",note:"Z posiłkiem",color:"#fda4af",id:"omega"},
+  {time:"12:00",label:"Prokit",dose:"50 mg",note:"Przed obiadem",color:"#10b981",id:"prokit2"},
+  {time:"13:30",label:"Ascofer",dose:"wg ulotki",note:"⚠️ Min. 4h po Euthyrox. Popić wodą.",color:"#fb923c",id:"ascofer"},
+  {time:"15:30",label:"Famotydyna",dose:"20 mg",note:"Min. 2h po Ascoferie",color:"#ec4899",id:"fam2"},
+  {time:"18:00",label:"Prokit",dose:"50 mg",note:"Przed kolacją",color:"#10b981",id:"prokit3"},
+  {time:"18:30",label:"Bupropion",dose:"300 mg",note:"Z kolacją",color:"#818cf8",id:"bupropion"},
+  {time:"18:30",label:"Lamitrin",dose:"100 mg",note:"Druga dawka — z kolacją",color:"#a78bfa",id:"lamitrin2"},
+  {time:"22:00",label:"NeoBianacid",dose:"1 tabletka",note:"Ssać powoli. Min. 2h przed kolejnymi lekami.",color:"#fb7185",id:"neobianacid"},
+  {time:"00:00",label:"Famotydyna",dose:"40 mg",note:"Nocna dawka",color:"#ec4899",id:"fam3"},
+  {time:"00:45",label:"Esoxx One",dose:"1 saszetka",note:"Małymi łykami przed snem",color:"#60a5fa",id:"esoxx"},
+  {time:"00:45",label:"Gaviscon",dose:"płyn — NIE tabletki",note:"⚠️ Tabletki gazują i nasilają odbijanie!",color:"#2dd4bf",id:"gaviscon"},
 ];
 
-const SYMPTOMS = ["bekanie","kaszel","katar","bol","gorzki","glos","nudnosci","dobre"];
-const SYM_LABELS = { bekanie:"💨 Bekanie", kaszel:"🤧 Kaszel", katar:"💧 Katar", bol:"🔴 Ból", gorzki:"😖 Gorzki smak", glos:"🎤 Gardło", nudnosci:"🌀 Nudności", dobre:"✅ Dobrze" };
-const SYM_COLORS = { bekanie:"#fb923c", kaszel:"#fb7185", katar:"#60a5fa", bol:"#f87171", gorzki:"#a78bfa", glos:"#2dd4bf", nudnosci:"#ec4899", dobre:"#10b981" };
+const SCHEDULE_TRAINING = [
+  {time:"09:30",label:"Euthyrox",dose:"wg lekarza",note:"⚠️ NA CZCZO — woda tylko. 60 min przed wszystkim.",color:"#f59e0b",id:"euthyrox"},
+  {time:"10:00",label:"Prokit",dose:"50 mg",note:"Przed śniadaniem",color:"#10b981",id:"prokit1"},
+  {time:"10:00",label:"Famotydyna",dose:"20 mg",note:"15-30 min przed śniadaniem",color:"#ec4899",id:"fam1"},
+  {time:"10:30",label:"Elvanse",dose:"70 mg",note:"Z posiłkiem — peak 12:30-14:30, dobry na wieczorny trening",color:"#818cf8",id:"elvanse"},
+  {time:"10:30",label:"Lamitrin",dose:"100 mg",note:"Pierwsza dawka — z posiłkiem",color:"#a78bfa",id:"lamitrin1"},
+  {time:"10:30",label:"Kwas foliowy",dose:"1 tabletka",note:"Z posiłkiem",color:"#86efac",id:"folik"},
+  {time:"10:30",label:"Omega-3",dose:"wg ulotki",note:"Z posiłkiem",color:"#fda4af",id:"omega"},
+  {time:"12:00",label:"Prokit",dose:"50 mg",note:"Przed obiadem",color:"#10b981",id:"prokit2"},
+  {time:"13:30",label:"Ascofer",dose:"wg ulotki",note:"⚠️ Min. 4h po Euthyrox. Popić wodą.",color:"#fb923c",id:"ascofer"},
+  {time:"15:30",label:"Famotydyna",dose:"20 mg",note:"Min. 2h po Ascoferie",color:"#ec4899",id:"fam2"},
+  {time:"15:45",label:"Prokit",dose:"50 mg",note:"Przed ostatnim posiłkiem przed treningiem",color:"#10b981",id:"prokit3",training:true},
+  {time:"17:00",label:"Famotydyna PRE-TRENING",dose:"40 mg",note:"⚡ Koufman: 40mg przed wysiłkiem. Min. 45 min przed startem.",color:"#2dd4bf",id:"fam-pre",training:true},
+  {time:"17:15",label:"Gaviscon PRE-TRENING",dose:"1 saszetka",note:"⚡ Bariera fizyczna przed intensywnym ruchem",color:"#2dd4bf",id:"gaviscon-pre",training:true},
+  {time:"17:15",label:"Esoxx One PRE-TRENING",dose:"1 saszetka",note:"⚡ Powleka krtań przed zajęciami — ochrona głosu",color:"#60a5fa",id:"esoxx-pre",training:true},
+  {time:"18:30",label:"Bupropion",dose:"300 mg",note:"⚠️ TRENING — weź po powrocie z posiłkiem potreningowym",color:"#818cf8",id:"bupropion",training:true},
+  {time:"18:30",label:"Lamitrin",dose:"100 mg",note:"Druga dawka — z posiłkiem po treningu",color:"#a78bfa",id:"lamitrin2",training:true},
+  {time:"23:30",label:"NeoBianacid",dose:"1 tabletka",note:"Po posiłku potreningowym. Min. 30 min przed famotydyną.",color:"#fb7185",id:"neobianacid"},
+  {time:"00:15",label:"Famotydyna",dose:"40 mg",note:"Nocna dawka",color:"#ec4899",id:"fam3"},
+  {time:"00:45",label:"Esoxx One",dose:"1 saszetka",note:"Małymi łykami przed snem",color:"#60a5fa",id:"esoxx"},
+  {time:"00:45",label:"Gaviscon",dose:"płyn — NIE tabletki",note:"⚠️ Po treningu refluks nocny bardziej prawdopodobny — koniecznie!",color:"#2dd4bf",id:"gaviscon"},
+];
 
-let selectedSyms = [];
-let selectedInt = null;
-let selectedMealType = "śniadanie";
-let selectedFeel = null;
+const MEAL_SCHEDULE_REGULAR = [
+  {time:"10:30",label:"🍽️ Śniadanie","tip":"owsianka, jajka, banan, jogurt naturalny"},
+  {time:"13:00",label:"🥗 Obiad","tip":"ryż/ziemniaki + białko + warzywa gotowane"},
+  {time:"16:30",label:"🍎 Przekąska","tip":"banan, melon, gruszka, wafle ryżowe"},
+  {time:"18:30",label:"🍲 Kolacja","tip":"lekka, bez kwaśnych i tłustych"},
+  {time:"20:30",label:"🌙 Ostatnia przekąska","tip":"owsianka lub banan"},
+  {time:"22:00",label:"🚫 STOP jedzenie","tip":"nic po tej godzinie"},
+];
 
-// ═══════════════════════════════════
-// STORAGE
-// ═══════════════════════════════════
-function getKey(type, date) { return `ht_${type}_${date}`; }
-function today() { return new Date().toISOString().slice(0,10); }
-function nowTime() { return new Date().toLocaleTimeString('pl-PL', {hour:'2-digit', minute:'2-digit'}); }
+const MEAL_SCHEDULE_TRAINING = [
+  {time:"10:30",label:"🍽️ Śniadanie","tip":"solidne — owsianka, jajka, jogurt"},
+  {time:"13:00",label:"🥗 Obiad","tip":"solidniejszy — ryż + białko + warzywa"},
+  {time:"16:00",label:"⚡ Pre-trening","tip":"LEKKI: banan, ryż, jogurt. Min. 2h przed startem!"},
+  {time:"22:00",label:"🔄 Post-trening","tip":"mały: banan, owsianka lub ryż z twarogiem"},
+  {time:"23:00",label:"🚫 STOP jedzenie","tip":""},
+];
 
-function saveData(type, data) { localStorage.setItem(getKey(type, today()), JSON.stringify(data)); }
-function loadData(type, date) { try { return JSON.parse(localStorage.getItem(getKey(type, date||today()))) || []; } catch(e) { return []; } }
+// ═══ TRIGGERS ═══
+const TRIGGERS = [
+  {words:["kawa","espresso","cappuccino","latte"],msg:"Kawa to Twój silny trigger — odbijanie i kaszel po ~15 min. Zamień na herbatę z rumianku."},
+  {words:["czekolada","nutella","kakao","kinder","bueno"],msg:"Czekolada relaksuje zwieracz przełyku. U Ciebie objawy po 7 minutach."},
+  {words:["pizza"],msg:"Pizza = pomidor + tłuszcz + ciasto. Jeden z najgorszych triggerów przed snem."},
+  {words:["maliny","jagody","truskawki","borówki","jeżyny","owoce leśne"],msg:"Owoce leśne pH 3.1-3.5 — bardzo kwaśne. Zamień na banan, melon lub gruszkę."},
+  {words:["smak malinowy","smak jagodowy","smak owocowy"],msg:"Smakowe produkty zawierają kwaśny aromat. Wybierz waniliowy lub naturalny."},
+  {words:["jogurt brzoskwin","smakowy jogurt"],msg:"Smakowe jogurty = kwaśny przecier owocowy. Wybierz skyr naturalny."},
+  {words:["cebula"],msg:"Cebula nasila LPR — relaksuje dolny zwieracz przełyku."},
+  {words:["czosnek"],msg:"Czosnek nasila LPR — unikaj nawet w małych ilościach."},
+  {words:["sernik"],msg:"Sernik = tłuszcz + cukier — spowalnia opróżnianie żołądka."},
+  {words:["croissant","rogalik"],msg:"Croissant = tłuszcz + cukier — duże obciążenie refluksowe."},
+  {words:["chipsy","czipsy"],msg:"Chipsy = tłuszcz + sól — trigger, zwłaszcza wieczorem."},
+  {words:["sok","napój gazowany","cola","fanta"],msg:"Soki i napoje gazowane są kwaśne lub gazowe — unikaj."},
+  {words:["edamame","ciecierzyca","fasola","soczewica"],msg:"Strączki mogą nasilać gazy i odbijanie — szczególnie przy podejrzeniu SIBO."},
+];
 
-function saveMeds(meds) { localStorage.setItem(`ht_meds_${today()}`, JSON.stringify(meds)); }
-function loadMeds() { try { return JSON.parse(localStorage.getItem(`ht_meds_${today()}`)) || {}; } catch(e) { return {}; } }
+// ═══ STATE ═══
+const SYM_LABELS={odbijanie:"💨 Odbijanie",kaszel:"🤧 Kaszel",katar:"💧 Katar",bol:"🔴 Ból",gorzki:"😖 Gorzki smak",glos:"🎤 Gardło",nudnosci:"🌀 Nudności",stres:"😰 Stres",trening:"💃 Po treningu",dobre:"✅ Dobrze"};
+const SYM_COLORS={odbijanie:"#fb923c",kaszel:"#fb7185",katar:"#60a5fa",bol:"#f87171",gorzki:"#a78bfa",glos:"#2dd4bf",nudnosci:"#ec4899",stres:"#f472b6",trening:"#34d399",dobre:"#10b981"};
 
-// ═══════════════════════════════════
-// NAVIGATION
-// ═══════════════════════════════════
-function showPage(id, btn) {
-  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
-  document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
+let dayType=localStorage.getItem('ht_daytype')||'regular';
+let selectedSyms=[],selIntVal={int:null,feel:null,sq:null,en:null},selMoodVal=null,selMealType="śniadanie";
+let wSyms=[],wInt=null;
+
+const today=()=>new Date().toISOString().slice(0,10);
+const nowTime=()=>new Date().toLocaleTimeString('pl-PL',{hour:'2-digit',minute:'2-digit'});
+const save=(k,v)=>localStorage.setItem(k,JSON.stringify(v));
+const load=(k,def=[])=>{try{return JSON.parse(localStorage.getItem(k))??def;}catch{return def;}};
+const todayKey=t=>`ht_${t}_${today()}`;
+const dateKey=(t,d)=>`ht_${t}_${d}`;
+
+// ═══ NAV ═══
+function showPage(id,btn){
+  document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
+  document.querySelectorAll('.nav-btn').forEach(b=>b.classList.remove('active'));
   document.getElementById('page-'+id).classList.add('active');
   btn.classList.add('active');
-  if(id === 'meds') renderMeds();
-  if(id === 'symptoms') renderSymptomsToday();
-  if(id === 'food') renderMealsToday();
-  if(id === 'history') renderHistory();
+  if(id==='meds'){renderMeds();renderWater();}
+  if(id==='symptoms')renderSymptomsToday();
+  if(id==='food'){renderMealsToday();renderMealSchedule();}
+  if(id==='sleep')renderSleepHistory();
+  if(id==='history')renderHistory();
 }
 
-// ═══════════════════════════════════
-// MEDS
-// ═══════════════════════════════════
-function renderMeds() {
-  const done = loadMeds();
-  const list = document.getElementById('meds-list');
-  const doneCount = Object.values(done).filter(Boolean).length;
-  document.getElementById('med-progress').style.width = Math.round((doneCount/SCHEDULE.length)*100)+'%';
-
-  let html = '';
-  let lastTime = '';
-  SCHEDULE.forEach(med => {
-    if(med.time !== lastTime) {
-      html += `<div class="med-time">${med.time}</div>`;
-      lastTime = med.time;
-    }
-    const isDone = done[med.id];
-    html += `
-      <div class="med-block">
-        <div class="med-item ${isDone?'done':''}" onclick="toggleMed('${med.id}')">
-          <div class="med-check" style="${isDone?'':'border-color:'+med.color}">${isDone?'✓':''}</div>
-          <div style="flex:1">
-            <div class="med-name" style="color:${med.color}">${med.label}</div>
-            <div class="med-dose">${med.dose}</div>
-          </div>
-        </div>
-        ${med.note ? `<div class="med-note">${med.note}</div>` : ''}
-      </div>`;
-  });
-  list.innerHTML = html;
-}
-
-function toggleMed(id) {
-  const done = loadMeds();
-  done[id] = !done[id];
-  saveMeds(done);
+// ═══ DAY TYPE ═══
+function setDayType(type){
+  dayType=type;
+  localStorage.setItem('ht_daytype',type);
+  document.getElementById('btn-regular').className='day-toggle-btn'+(type==='regular'?' active-regular':'');
+  document.getElementById('btn-training').className='day-toggle-btn'+(type==='training'?' active-training':'');
   renderMeds();
-  if(done[id]) scheduleConfirmNotif();
 }
 
-function scheduleConfirmNotif() {
-  if(Notification.permission === 'granted') {
-    new Notification('Health Tracker ✓', { body: 'Lek oznaczony jako wzięty!', icon: '/icon.png' });
+// ═══ MEDS ═══
+function renderMeds(){
+  const schedule=dayType==='training'?SCHEDULE_TRAINING:SCHEDULE_REGULAR;
+  const done=load(todayKey('meds'),{});
+  const doneCount=Object.values(done).filter(Boolean).length;
+  document.getElementById('med-progress').style.width=Math.round((doneCount/schedule.length)*100)+'%';
+  let html='',lastTime='';
+  schedule.forEach(med=>{
+    if(med.time!==lastTime){html+=`<div class="med-time">${med.time}</div>`;lastTime=med.time;}
+    const isDone=done[med.id];
+    html+=`<div class="med-item ${isDone?'done':''}" onclick="toggleMed('${med.id}')">
+      <div class="med-check" style="${isDone?'':'border-color:'+med.color}">${isDone?'✓':''}</div>
+      <div style="flex:1">
+        <div class="med-name" style="color:${med.color}">${med.label}${med.training?'<span class="training-badge">TRENING</span>':''}</div>
+        <div class="med-dose">${med.dose}</div>
+      </div>
+    </div>${med.note?`<div class="med-note">${med.note}</div>`:''}`;
+  });
+  document.getElementById('meds-list').innerHTML=html;
+}
+
+function toggleMed(id){
+  const done=load(todayKey('meds'),{});
+  done[id]=!done[id];save(todayKey('meds'),done);renderMeds();
+  if(done[id]&&Notification.permission==='granted'){
+    const schedule=dayType==='training'?SCHEDULE_TRAINING:SCHEDULE_REGULAR;
+    const med=schedule.find(m=>m.id===id);
+    if(med)new Notification(`✓ ${med.label} wzięty`,{body:med.dose,tag:id+'_done'});
   }
 }
 
-// ═══════════════════════════════════
-// SYMPTOMS
-// ═══════════════════════════════════
-function toggleSym(btn) {
-  const sym = btn.dataset.sym;
-  btn.classList.toggle('selected');
-  if(selectedSyms.includes(sym)) selectedSyms = selectedSyms.filter(s => s !== sym);
-  else selectedSyms.push(sym);
+// ═══ WIDGET ═══
+function wToggle(btn){
+  const s=btn.dataset.sym;
+  btn.classList.toggle('sel');
+  if(wSyms.includes(s))wSyms=wSyms.filter(x=>x!==s);else wSyms.push(s);
+}
+function wSelInt(btn){
+  document.querySelectorAll('.wi-btn').forEach(b=>b.classList.remove('sel'));
+  btn.classList.add('sel');wInt=btn.dataset.wi;
+}
+function wSave(){
+  if(!wSyms.length){alert('Wybierz przynajmniej jeden objaw');return;}
+  const syms=load(todayKey('syms'));
+  syms.push({time:nowTime(),syms:[...wSyms],intensity:wInt,note:'',ts:Date.now()});
+  save(todayKey('syms'),syms);
+  wSyms=[];wInt=null;
+  document.querySelectorAll('.wq-btn').forEach(b=>b.classList.remove('sel'));
+  document.querySelectorAll('.wi-btn').forEach(b=>b.classList.remove('sel'));
+  // Flash feedback
+  const btn=document.querySelector('.widget-save');
+  btn.textContent='✅ Zapisano!';btn.style.background='#10b981';
+  setTimeout(()=>{btn.textContent='💾 Zapisz teraz';btn.style.background='var(--purple)';},1500);
 }
 
-function selectInt(btn) {
-  document.querySelectorAll('.int-btn[data-int]').forEach(b => b.classList.remove('selected'));
-  btn.classList.add('selected');
-  selectedInt = btn.dataset.int;
+// ═══ WATER ═══
+const TOTAL_SIPS=16;
+function renderWater(){
+  const sips=load(todayKey('water'),0);
+  document.getElementById('sip-count').textContent=sips;
+  let html='';
+  for(let i=0;i<TOTAL_SIPS;i++)html+=`<div class="sip-dot ${i<sips?'filled':''}" onclick="addSip()">${i<sips?'💧':''}</div>`;
+  document.getElementById('sips-grid').innerHTML=html;
 }
+function addSip(){let s=load(todayKey('water'),0);if(s>=TOTAL_SIPS)return;save(todayKey('water'),s+1);renderWater();}
+function resetWater(){save(todayKey('water'),0);renderWater();}
 
-function saveSymptom() {
-  if(selectedSyms.length === 0) { alert('Wybierz przynajmniej jeden objaw'); return; }
-  const syms = loadData('syms');
-  syms.push({ time: nowTime(), syms: [...selectedSyms], intensity: selectedInt, note: document.getElementById('sym-note').value, ts: Date.now() });
-  saveData('syms', syms);
-
-  // Reset
-  selectedSyms = [];
-  selectedInt = null;
-  document.querySelectorAll('.sym-btn').forEach(b => b.classList.remove('selected'));
-  document.querySelectorAll('.int-btn[data-int]').forEach(b => b.classList.remove('selected'));
-  document.getElementById('sym-note').value = '';
+// ═══ SYMPTOMS ═══
+function toggleSym(btn){
+  const s=btn.dataset.sym;btn.classList.toggle('selected');
+  if(selectedSyms.includes(s))selectedSyms=selectedSyms.filter(x=>x!==s);else selectedSyms.push(s);
+}
+function selInt(btn,group){
+  document.querySelectorAll(`.int-btn[data-${group}]`).forEach(b=>b.classList.remove('sel'));
+  btn.classList.add('sel');selIntVal[group]=btn.dataset[group];
+}
+function saveSymptom(){
+  if(!selectedSyms.length){alert('Wybierz przynajmniej jeden objaw');return;}
+  const syms=load(todayKey('syms'));
+  syms.push({time:nowTime(),syms:[...selectedSyms],intensity:selIntVal.int,note:document.getElementById('sym-note').value,ts:Date.now()});
+  save(todayKey('syms'),syms);
+  selectedSyms=[];selIntVal.int=null;
+  document.querySelectorAll('.sym-btn').forEach(b=>b.classList.remove('selected'));
+  document.querySelectorAll('.int-btn[data-int]').forEach(b=>b.classList.remove('sel'));
+  document.getElementById('sym-note').value='';
   renderSymptomsToday();
 }
-
-function renderSymptomsToday() {
-  const syms = loadData('syms');
-  const el = document.getElementById('symptoms-today');
-  if(syms.length === 0) { el.innerHTML = '<div class="empty">Brak wpisów na dziś</div>'; return; }
-  el.innerHTML = [...syms].reverse().map(s => `
+function renderSymptomsToday(){
+  const syms=load(todayKey('syms'));
+  const el=document.getElementById('symptoms-today');
+  if(!syms.length){el.innerHTML='<div class="empty">Brak wpisów na dziś</div>';return;}
+  el.innerHTML=[...syms].reverse().map((s,i)=>`
     <div class="log-item">
-      <div class="log-header">
-        <span class="log-time">🕐 ${s.time}</span>
-        ${s.intensity ? `<span class="log-int">${['','😌','😟','😣'][s.intensity]}</span>` : ''}
-      </div>
-      <div class="log-syms">${s.syms.map(sym => `<span class="log-sym" style="background:${SYM_COLORS[sym]}22;color:${SYM_COLORS[sym]}">${SYM_LABELS[sym]}</span>`).join('')}</div>
-      ${s.note ? `<div class="log-note">${s.note}</div>` : ''}
+      <button class="del-btn" onclick="deleteSym(${syms.length-1-i})">✕</button>
+      <div class="log-header"><span class="log-time">🕐 ${s.time}</span>${s.intensity?`<span>${['','😌','😟','😣'][s.intensity]}</span>`:''}</div>
+      <div class="log-syms">${s.syms.map(sym=>`<span class="log-sym" style="background:${SYM_COLORS[sym]}22;color:${SYM_COLORS[sym]}">${SYM_LABELS[sym]}</span>`).join('')}</div>
+      ${s.note?`<div class="log-note">${s.note}</div>`:''}
     </div>`).join('');
 }
-
-// ═══════════════════════════════════
-// MEALS
-// ═══════════════════════════════════
-function selectMealType(btn) {
-  document.querySelectorAll('.meal-type-btn').forEach(b => b.classList.remove('selected'));
-  btn.classList.add('selected');
-  selectedMealType = btn.dataset.type;
+function deleteSym(idx){
+  if(!confirm('Usunąć ten wpis?'))return;
+  const syms=load(todayKey('syms'));syms.splice(idx,1);save(todayKey('syms'),syms);renderSymptomsToday();
 }
 
-function selectFeel(btn) {
-  document.querySelectorAll('.int-btn[data-feel]').forEach(b => b.classList.remove('selected'));
-  btn.classList.add('selected');
-  selectedFeel = btn.dataset.feel;
+// ═══ MEALS ═══
+function renderMealSchedule(){
+  const schedule=dayType==='training'?MEAL_SCHEDULE_TRAINING:MEAL_SCHEDULE_REGULAR;
+  const now=new Date();
+  document.getElementById('meal-schedule').innerHTML=schedule.map(m=>{
+    const[h,min]=m.time.split(':').map(Number);
+    const t=new Date(now);t.setHours(h,min,0,0);
+    const past=t<now;
+    return `<div style="display:flex;gap:8px;align-items:baseline;opacity:${past?0.5:1}">
+      <span style="color:${past?'var(--muted)':'var(--amber)'};font-weight:700;font-size:11px;width:42px">${m.time}</span>
+      <span style="color:${past?'var(--muted)':'var(--text)'];font-size:12px">${m.label}</span>
+      ${m.tip?`<span style="color:var(--muted);font-size:11px">— ${m.tip}</span>`:''}
+    </div>`;
+  }).join('');
 }
-
-function saveMeal() {
-  const input = document.getElementById('meal-input');
-  if(!input.value.trim()) { alert('Wpisz co zjadłaś'); return; }
-  const meals = loadData('meals');
-  meals.push({ time: nowTime(), type: selectedMealType, food: input.value.trim(), feel: selectedFeel, ts: Date.now() });
-  saveData('meals', meals);
-  input.value = '';
-  selectedFeel = null;
-  document.querySelectorAll('.int-btn[data-feel]').forEach(b => b.classList.remove('selected'));
+function selMealType(btn){
+  document.querySelectorAll('.mt-btn').forEach(b=>b.classList.remove('sel'));
+  btn.classList.add('sel');selMealType=btn.dataset.type;
+}
+function checkTriggers(val){
+  const v=val.toLowerCase();
+  const al=document.getElementById('trigger-alert');
+  const mg=document.getElementById('trigger-msg');
+  const found=TRIGGERS.find(t=>t.words.some(w=>v.includes(w)));
+  if(found&&val.length>2){al.style.display='block';mg.textContent=found.msg;}
+  else al.style.display='none';
+}
+function saveMeal(){
+  const input=document.getElementById('meal-input');
+  if(!input.value.trim()){alert('Wpisz co zjadłaś');return;}
+  const meals=load(todayKey('meals'));
+  meals.push({time:nowTime(),type:selMealType,food:input.value.trim(),feel:selIntVal.feel,ts:Date.now()});
+  save(todayKey('meals'),meals);
+  input.value='';selIntVal.feel=null;
+  document.querySelectorAll('.int-btn[data-feel]').forEach(b=>b.classList.remove('sel'));
+  document.getElementById('trigger-alert').style.display='none';
   renderMealsToday();
 }
-
-function renderMealsToday() {
-  const meals = loadData('meals');
-  const el = document.getElementById('meals-today');
-  const FEEL = { dobrze: '😊', ok: '😐', zle: '😟' };
-  if(meals.length === 0) { el.innerHTML = '<div class="empty">Brak posiłków na dziś</div>'; return; }
-  el.innerHTML = [...meals].reverse().map(m => `
-    <div class="log-item">
-      <div class="log-header">
-        <span class="log-time">🕐 ${m.time}</span>
-        <span class="log-type">${m.type} ${m.feel ? FEEL[m.feel] : ''}</span>
-      </div>
-      <div style="font-size:13px;margin-top:4px">${m.food}</div>
+function renderMealsToday(){
+  const meals=load(todayKey('meals'));
+  const el=document.getElementById('meals-today');
+  const FEEL={dobrze:'😊',ok:'😐',zle:'😟'};
+  if(!meals.length){el.innerHTML='<div class="empty">Brak posiłków na dziś</div>';return;}
+  el.innerHTML=[...meals].reverse().map((m,i)=>`
+    <div class="log-item" style="border-left:2px solid #10b981">
+      <button class="del-btn" onclick="deleteMeal(${meals.length-1-i})">✕</button>
+      <div class="log-header"><span class="log-time">🕐 ${m.time}</span><span class="log-type">${m.type} ${m.feel?FEEL[m.feel]:''}</span></div>
+      <div style="font-size:13px;margin-top:3px">${m.food}</div>
     </div>`).join('');
 }
-
-// ═══════════════════════════════════
-// HISTORY & PATTERNS
-// ═══════════════════════════════════
-function renderHistory() {
-  // Summary today
-  const done = loadMeds();
-  document.getElementById('sum-meds').textContent = Object.values(done).filter(Boolean).length;
-  document.getElementById('sum-syms').textContent = loadData('syms').length;
-  document.getElementById('sum-meals').textContent = loadData('meals').length;
-
-  // Pattern analysis
-  analyzePatterns();
-
-  // History list
-  const el = document.getElementById('history-list');
-  let html = '';
-  for(let i = 0; i < 7; i++) {
-    const d = new Date(); d.setDate(d.getDate() - i);
-    const dateStr = d.toISOString().slice(0,10);
-    const dayLabel = i === 0 ? 'Dziś' : i === 1 ? 'Wczoraj' : d.toLocaleDateString('pl-PL', {weekday:'long', day:'numeric', month:'short'});
-    const syms = loadData('syms', dateStr);
-    const meals = loadData('meals', dateStr);
-    if(syms.length === 0 && meals.length === 0) continue;
-
-    html += `<div class="day-section">
-      <div class="day-label">${dayLabel}</div>`;
-
-    syms.forEach(s => {
-      html += `<div class="log-item">
-        <div class="log-header"><span class="log-time">🕐 ${s.time}</span>${s.intensity?`<span>${['','😌','😟','😣'][s.intensity]}</span>`:''}</div>
-        <div class="log-syms">${s.syms.map(sym=>`<span class="log-sym" style="background:${SYM_COLORS[sym]}22;color:${SYM_COLORS[sym]}">${SYM_LABELS[sym]}</span>`).join('')}</div>
-        ${s.note?`<div class="log-note">${s.note}</div>`:''}
-      </div>`;
-    });
-
-    meals.forEach(m => {
-      html += `<div class="log-item" style="border-left:2px solid #10b981">
-        <div class="log-header"><span class="log-time">🍽️ ${m.time}</span><span class="log-type">${m.type}</span></div>
-        <div style="font-size:13px;margin-top:4px">${m.food}</div>
-      </div>`;
-    });
-
-    html += '</div>';
-  }
-  el.innerHTML = html || '<div class="empty">Brak danych z ostatnich 7 dni</div>';
+function deleteMeal(idx){
+  if(!confirm('Usunąć ten posiłek?'))return;
+  const meals=load(todayKey('meals'));meals.splice(idx,1);save(todayKey('meals'),meals);renderMealsToday();
 }
 
-function analyzePatterns() {
-  const el = document.getElementById('pattern-analysis');
-  const symCounts = {};
-  for(let i = 0; i < 7; i++) {
-    const d = new Date(); d.setDate(d.getDate()-i);
-    const syms = loadData('syms', d.toISOString().slice(0,10));
-    syms.forEach(s => s.syms.forEach(sym => { symCounts[sym] = (symCounts[sym]||0)+1; }));
-  }
-  if(Object.keys(symCounts).length === 0) {
-    el.innerHTML = '<div style="color:var(--muted);font-size:13px">Za mało danych — loguj objawy przez kilka dni aby zobaczyć wzorce.</div>';
-    return;
-  }
-  const sorted = Object.entries(symCounts).sort((a,b) => b[1]-a[1]);
-  el.innerHTML = `
-    <div class="card-title" style="color:var(--purple)">Najczęstsze (7 dni)</div>
-    ${sorted.map(([sym, count]) => `
-      <div style="display:flex;align-items:center;gap:10px;margin-bottom:8px">
-        <span style="color:${SYM_COLORS[sym]};font-size:13px;width:120px">${SYM_LABELS[sym]}</span>
-        <div style="flex:1;background:var(--card2);border-radius:4px;height:8px;overflow:hidden">
-          <div style="width:${Math.min(100,count*15)}%;height:100%;background:${SYM_COLORS[sym]};border-radius:4px"></div>
-        </div>
-        <span style="color:var(--muted);font-size:12px;width:20px;text-align:right">${count}x</span>
-      </div>`).join('')}`;
+// ═══ SLEEP ═══
+function selMoodBtn(btn){
+  document.querySelectorAll('.mood-btn').forEach(b=>b.classList.remove('sel'));
+  btn.classList.add('sel');selMoodVal=btn.dataset.mood;
+}
+function saveSleep(){
+  const entry={date:today(),time:nowTime(),start:document.getElementById('sleep-start').value,end:document.getElementById('sleep-end').value,quality:selIntVal.sq,mood:selMoodVal,energy:selIntVal.en,note:document.getElementById('sleep-note').value,ts:Date.now()};
+  const all=load('ht_sleep_all');
+  const idx=all.findIndex(e=>e.date===today());
+  if(idx>=0)all[idx]=entry;else all.push(entry);
+  save('ht_sleep_all',all);
+  document.getElementById('sleep-start').value='';document.getElementById('sleep-end').value='';document.getElementById('sleep-note').value='';
+  selIntVal.sq=null;selIntVal.en=null;selMoodVal=null;
+  document.querySelectorAll('.int-btn[data-sq],.int-btn[data-en]').forEach(b=>b.classList.remove('sel'));
+  document.querySelectorAll('.mood-btn').forEach(b=>b.classList.remove('sel'));
+  renderSleepHistory();alert('✅ Sen zapisany!');
+}
+function renderSleepHistory(){
+  const all=load('ht_sleep_all');const el=document.getElementById('sleep-history');
+  const MOOD=['','😩','😟','😐','🙂','😄'];const EN=['','🪫','😴','⚡'];const Q=['','😴 Słaby','😐 OK','😊 Dobry'];
+  if(!all.length){el.innerHTML='<div class="empty">Brak wpisów</div>';return;}
+  el.innerHTML=[...all].reverse().slice(0,7).map((e,i)=>`
+    <div class="log-item">
+      <button class="del-btn" onclick="deleteSleep(${i})">✕</button>
+      <div class="log-header"><span class="log-time">${e.date}</span><span style="font-size:16px">${e.mood?MOOD[e.mood]:''}</span></div>
+      <div style="font-size:12px;color:var(--muted);margin-top:3px">${e.start&&e.end?`🕐 ${e.start}→${e.end} · `:''}${e.quality?Q[e.quality]:''} ${e.energy?'· energia: '+EN[e.energy]:''}</div>
+      ${e.note?`<div class="log-note">${e.note}</div>`:''}
+    </div>`).join('');
+}
+function deleteSleep(displayIdx){
+  if(!confirm('Usunąć ten wpis?'))return;
+  const all=load('ht_sleep_all');
+  const reversed=[...all].reverse();reversed.splice(displayIdx,1);
+  save('ht_sleep_all',reversed.reverse());renderSleepHistory();
 }
 
-// ═══════════════════════════════════
-// NOTIFICATIONS
-// ═══════════════════════════════════
-async function requestNotifications() {
-  if(!('Notification' in window)) { alert('Twoja przeglądarka nie obsługuje powiadomień. Użyj Safari na iPhone.'); return; }
-  const perm = await Notification.requestPermission();
-  if(perm === 'granted') {
-    document.getElementById('notify-banner').style.display = 'none';
-    scheduleAllNotifications();
-    new Notification('Health Tracker 🎉', { body: 'Powiadomienia włączone! Będziesz dostawać przypomnienia o lekach.' });
+// ═══ HISTORY ═══
+function renderHistory(){
+  const done=load(todayKey('meds'),{});
+  document.getElementById('sum-meds').textContent=Object.values(done).filter(Boolean).length;
+  document.getElementById('sum-syms').textContent=load(todayKey('syms')).length;
+  document.getElementById('sum-meals').textContent=load(todayKey('meals')).length;
+  renderPatterns();renderHistoryList();
+}
+function renderPatterns(){
+  const counts={};
+  for(let i=0;i<7;i++){const d=new Date();d.setDate(d.getDate()-i);load(dateKey('syms',d.toISOString().slice(0,10))).forEach(s=>s.syms.forEach(sym=>{counts[sym]=(counts[sym]||0)+1;}));}
+  const el=document.getElementById('pattern-card');
+  if(!Object.keys(counts).length){el.innerHTML='<div style="color:var(--muted);font-size:12px">Loguj objawy przez kilka dni.</div>';return;}
+  const sorted=Object.entries(counts).sort((a,b)=>b[1]-a[1]);const max=sorted[0][1];
+  el.innerHTML=sorted.map(([sym,count])=>`<div class="pat-row"><span class="pat-name" style="color:${SYM_COLORS[sym]}">${SYM_LABELS[sym]}</span><div class="pat-bar-bg"><div class="pat-bar" style="width:${Math.round(count/max*100)}%;background:${SYM_COLORS[sym]}"></div></div><span class="pat-count">${count}×</span></div>`).join('');
+}
+function renderHistoryList(){
+  const el=document.getElementById('history-list');let html='';
+  const FEEL={dobrze:'😊',ok:'😐',zle:'😟'};const MOOD=['','😩','😟','😐','🙂','😄'];
+  for(let i=0;i<7;i++){
+    const d=new Date();d.setDate(d.getDate()-i);
+    const ds=d.toISOString().slice(0,10);
+    const label=i===0?'Dziś':i===1?'Wczoraj':d.toLocaleDateString('pl-PL',{weekday:'long',day:'numeric',month:'short'});
+    const syms=load(dateKey('syms',ds));const meals=load(dateKey('meals',ds));const sleep=load('ht_sleep_all',[]).find(e=>e.date===ds);
+    if(!syms.length&&!meals.length&&!sleep)continue;
+    html+=`<div class="day-section"><div class="day-label">${label}</div>`;
+    if(sleep)html+=`<div class="log-item" style="border-left:2px solid var(--purple)"><div class="log-header"><span class="log-time">🌙 Sen</span><span>${sleep.mood?MOOD[sleep.mood]:''}</span></div><div style="font-size:12px;color:var(--muted)">${sleep.start||'?'}→${sleep.end||'?'}</div></div>`;
+    meals.forEach((m,mi)=>{html+=`<div class="log-item" style="border-left:2px solid var(--green)"><button class="del-btn" onclick="deleteMealDate('${ds}',${mi})">✕</button><div class="log-header"><span class="log-time">🍽️ ${m.time}</span><span class="log-type">${m.type} ${m.feel?FEEL[m.feel]:''}</span></div><div style="font-size:12px;margin-top:2px">${m.food}</div></div>`;});
+    syms.forEach((s,si)=>{html+=`<div class="log-item"><button class="del-btn" onclick="deleteSymDate('${ds}',${si})">✕</button><div class="log-header"><span class="log-time">🕐 ${s.time}</span>${s.intensity?`<span>${['','😌','😟','😣'][s.intensity]}</span>`:''}</div><div class="log-syms">${s.syms.map(sym=>`<span class="log-sym" style="background:${SYM_COLORS[sym]}22;color:${SYM_COLORS[sym]}">${SYM_LABELS[sym]}</span>`).join('')}</div>${s.note?`<div class="log-note">${s.note}</div>`:''}</div>`;});
+    html+='</div>';
   }
+  el.innerHTML=html||'<div class="empty">Brak danych z ostatnich 7 dni</div>';
+}
+function deleteSymDate(ds,idx){if(!confirm('Usunąć?'))return;const s=load(dateKey('syms',ds));s.splice(idx,1);save(dateKey('syms',ds),s);renderHistoryList();}
+function deleteMealDate(ds,idx){if(!confirm('Usunąć?'))return;const m=load(dateKey('meals',ds));m.splice(idx,1);save(dateKey('meals',ds),m);renderHistoryList();}
+
+// ═══ EXPORT ═══
+function generateExport(){
+  let txt=`=== RAPORT ZDROWIA — ${new Date().toLocaleDateString('pl-PL')} ===\n\n`;
+  for(let i=6;i>=0;i--){
+    const d=new Date();d.setDate(d.getDate()-i);const ds=d.toISOString().slice(0,10);
+    const label=i===0?'DZIŚ':i===1?'WCZORAJ':d.toLocaleDateString('pl-PL',{weekday:'long'}).toUpperCase();
+    const syms=load(dateKey('syms',ds));const meals=load(dateKey('meals',ds));
+    const sleep=load('ht_sleep_all',[]).find(e=>e.date===ds);
+    const done=load(dateKey('meds',ds),{});const doneCount=Object.values(done).filter(Boolean).length;
+    if(!syms.length&&!meals.length&&!sleep&&!doneCount)continue;
+    txt+=`--- ${label} (${ds}) ---\n`;
+    if(sleep)txt+=`Sen: ${sleep.start||'?'}→${sleep.end||'?'}, jakość: ${['','SŁABY','OK','DOBRY'][sleep.quality]||'–'}, nastrój: ${sleep.mood||'–'}/5, energia: ${['','BRAK','NISKI','DOBRY'][sleep.energy]||'–'}${sleep.note?'\n  '+sleep.note:''}\n`;
+    txt+=`Leki: ${doneCount}/${dayType==='training'?SCHEDULE_TRAINING.length:SCHEDULE_REGULAR.length} wziętych\n`;
+    if(meals.length){txt+=`Posiłki:\n`;meals.forEach(m=>{txt+=`  ${m.time} [${m.type}] ${m.food}${m.feel?' ('+(m.feel==='dobrze'?'dobrze':m.feel==='ok'?'ok':'źle')+')':''}\n`;});}
+    if(syms.length){txt+=`Objawy:\n`;syms.forEach(s=>{txt+=`  ${s.time} [${['','lekko','średnio','mocno'][s.intensity]||'–'}] ${s.syms.map(x=>SYM_LABELS[x]).join(', ')}${s.note?'\n    '+s.note:''}\n`;});}
+    txt+='\n';
+  }
+  txt+=`=== KONIEC === ${new Date().toLocaleString('pl-PL')}`;
+  const box=document.getElementById('export-box');box.style.display='block';box.textContent=txt;
+  document.getElementById('copy-btn').style.display='block';
+}
+function copyExport(){
+  const txt=document.getElementById('export-box').textContent;
+  navigator.clipboard.writeText(txt).then(()=>alert('✅ Skopiowano!')).catch(()=>{const ta=document.createElement('textarea');ta.value=txt;document.body.appendChild(ta);ta.select();document.execCommand('copy');ta.remove();alert('✅ Skopiowano!');});
 }
 
-function scheduleAllNotifications() {
-  // Schedule notifications for each med time today
-  const now = new Date();
-  SCHEDULE.forEach(med => {
-    const [h, m] = med.time.split(':').map(Number);
-    const medTime = new Date(now);
-    medTime.setHours(h, m, 0, 0);
-    const delay = medTime - now;
-    if(delay > 0 && delay < 24*60*60*1000) {
-      setTimeout(() => {
-        if(Notification.permission === 'granted') {
-          new Notification(`💊 ${med.label} — ${med.time}`, {
-            body: `${med.dose} • ${med.note}`,
-            tag: med.id,
-          });
-        }
-      }, delay);
+// ═══ NOTIFICATIONS ═══
+async function requestNotifications(){
+  if(!('Notification' in window)){alert('Użyj Safari na iPhone.');return;}
+  const p=await Notification.requestPermission();
+  if(p==='granted'){document.getElementById('notify-banner').style.display='none';scheduleAll();new Notification('Health Tracker 🎉',{body:'Powiadomienia włączone!'});}
+}
+
+function scheduleAll(){
+  const now=new Date();
+  const schedule=dayType==='training'?SCHEDULE_TRAINING:SCHEDULE_REGULAR;
+
+  // Med notifications
+  schedule.forEach(med=>{
+    const[h,m]=med.time.split(':').map(Number);
+    const t=new Date(now);t.setHours(h,m,0,0);
+    const delay=t-now;
+    if(delay>0&&delay<86400000){
+      setTimeout(()=>{
+        if(Notification.permission==='granted')
+          new Notification(`💊 ${med.label} — ${med.time}`,{body:`${med.dose}`,tag:med.id});
+      },delay);
     }
   });
+
+  // Meal notifications
+  const mealSched=dayType==='training'?MEAL_SCHEDULE_TRAINING:MEAL_SCHEDULE_REGULAR;
+  mealSched.forEach(meal=>{
+    const[h,m]=meal.time.split(':').map(Number);
+    const t=new Date(now);t.setHours(h,m,0,0);
+    const delay=t-now;
+    if(delay>0&&delay<86400000){
+      setTimeout(()=>{
+        if(Notification.permission==='granted')
+          new Notification(`🍽️ ${meal.label}`,{body:meal.tip||'Czas na posiłek!',tag:'meal_'+meal.time});
+      },delay);
+    }
+  });
+
+  // Water reminder every 45 min
+  const wInterval=45*60*1000;
+  setTimeout(function fw(){
+    const sips=load(todayKey('water'),0);
+    if(sips<TOTAL_SIPS&&Notification.permission==='granted')
+      new Notification('💧 Wypij łyk wody',{body:'Małymi łykami — lepiej dla LPR',tag:'water'});
+    setTimeout(fw,wInterval);
+  },wInterval);
 }
 
-// ═══════════════════════════════════
-// INIT
-// ═══════════════════════════════════
-function init() {
-  // Date
-  document.getElementById('today-date').textContent = new Date().toLocaleDateString('pl-PL', { weekday:'long', day:'numeric', month:'long' });
-
-  // Notify banner
-  if('Notification' in window && Notification.permission === 'default') {
-    document.getElementById('notify-banner').style.display = 'flex';
-  } else if(Notification.permission === 'granted') {
-    scheduleAllNotifications();
-  }
-
-  renderMeds();
+// ═══ INIT ═══
+function init(){
+  document.getElementById('today-date').textContent=new Date().toLocaleDateString('pl-PL',{weekday:'long',day:'numeric',month:'long'});
+  setDayType(dayType);
+  if('Notification' in window&&Notification.permission==='default')document.getElementById('notify-banner').style.display='flex';
+  else if(Notification.permission==='granted'){document.getElementById('notify-banner').style.display='none';scheduleAll();}
+  renderMeds();renderWater();
 }
-
 init();
 </script>
 </body>
